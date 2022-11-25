@@ -1,0 +1,17 @@
+Prevent configure from enabling Altivec.
+
+There is some runtime detection code, and with an older GCC it might be safe
+for G3, but this library is only used in a few cases for a couple of engines,
+so it's probably safer not to trigger this old code at all.
+
+--- a/configure
++++ b/configure
+@@ -4918,7 +4918,7 @@
+     else
+         :
+     fi;;
+-    ppc-* | powerpc-*)
++    altivec-ppc-only-* | altivec-powerpc-only-*)
+ 	have_altivec=no
+ 	for TRY_CFLAGS in "-mpim-altivec -force_cpusubtype_ALL" -faltivec -maltivec -fvec; do
+ 	    { echo "$as_me:$LINENO: checking if $CC supports $OPT_CFLAGS $TRY_CFLAGS $CFLAGS flags" >&5
