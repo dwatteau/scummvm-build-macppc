@@ -108,7 +108,14 @@ __do_cmake () {
 
 __do_make () {
 	local num_cpus
-	num_cpus=$(nproc || grep -c ^processor /proc/cpuinfo || echo 1)
+	num_cpus=$(getconf _NPROCESSORS_ONLN 2>/dev/null || getconf NPROCESSORS_ONLN 2>/dev/null || echo 1)
+	case "$num_cpus" in
+		''|*[!0-9]*)
+			# Older systems may return "undefined"
+			num_cpus=1
+			;;
+	esac
+
 	make -j${NUM_CPUS:-$num_cpus} "$@"
 }
 
