@@ -1,3 +1,5 @@
+export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
 __do_make_bdir () {
 	# If build dir hasn't been cleant with do_clean_dir before this step will fail
 	# It's intended to keep images size at minimum
@@ -75,7 +77,7 @@ __do_http_fetch () {
 		rm -r "$1"*/
 	fi
 	fname=$(basename $2)
-	wget --no-hsts --progress=dot "$2" -O "$fname"
+	/opt/macports-tff/bin/curl -L -o "$fname" "$2"
 
 	__do_verify "$fname" "$4"
 
@@ -102,7 +104,7 @@ __do_configure () {
 __do_cmake () {
 	mkdir -p build
 	cd build
-	cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
+	/opt/macports-tff/bin/cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
 		-DBUILD_SHARED_LIBS=no "$@" ..
 }
 
