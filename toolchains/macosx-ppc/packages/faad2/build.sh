@@ -1,6 +1,6 @@
 #! /bin/sh
 
-FAAD2_VERSION=2_10_0
+FAAD2_VERSION=2_10_1
 #FAAD2_SHA256=985c3fadb9789d2815e50f4ff714511c79c2710ac27a4aaaf5c0c2662141426d
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -9,7 +9,7 @@ HELPERS_DIR=$PACKAGE_DIR/../../../common
 
 do_make_bdir
 
-do_http_fetch faad2 "https://github.com/knik0/faad2/archive/refs/tags/${FAAD2_VERSION}.tar.gz" \
+do_http_fetch faad2 "https://github.com/knik0/faad2/archive/2.10.1/faad-${FAAD2_VERSION}.tar.gz" \
 	'tar xzf' #"sha256:${FAAD2_SHA256}"
 
 export MACOSX_DEPLOYMENT_TARGET=10.4
