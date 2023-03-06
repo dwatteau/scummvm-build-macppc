@@ -118,7 +118,7 @@ __do_make () {
 			;;
 	esac
 
-	make -j${NUM_CPUS:-$num_cpus} "$@"
+	/opt/macports-tff/bin/gmake -j${NUM_CPUS:-$num_cpus} "$@"
 }
 
 __log () {
