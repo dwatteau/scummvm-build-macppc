@@ -28,8 +28,9 @@ LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4
 --disable-install-docs \
 --disable-install-bins \
 --enable-vp8 \
+--enable-vp9 \
 --disable-vp8-encoder \
---disable-vp9 \
+--disable-vp9-encoder \
 --disable-shared \
 --enable-static \
 --disable-unit-tests
