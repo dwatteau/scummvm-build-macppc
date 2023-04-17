@@ -9,7 +9,9 @@ giflib
 libjpeg-turbo
 libmad
 libmpeg2
+libmikmod
 libpng
+libvpx
 
 flac
 libogg
