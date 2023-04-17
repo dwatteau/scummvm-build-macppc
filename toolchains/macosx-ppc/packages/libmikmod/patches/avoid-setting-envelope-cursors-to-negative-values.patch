@@ -1,0 +1,18 @@
+Avoid setting envelope cursors to negative values
+
+from OpenBSD, and mikmod's original author
+
+--- a/playercode/mplayer.c.orig	Mon Apr 27 04:51:00 2015
++++ b/playercode/mplayer.c	Fri Mar 18 07:39:21 2016
+@@ -368,9 +368,9 @@ static SWORD StartEnvelope(ENVPR *t,UBYTE flg,UBYTE pt
+ 	}
+ 
+ 	/* Fit in the envelope, still */
+-	if (t->a >= t->pts)
++	if (t->a >= t->pts && t->pts != 0)
+ 		t->a = t->pts - 1;
+-	if (t->b >= t->pts)
++	if (t->b >= t->pts && t->pts != 0)
+ 		t->b = t->pts-1;
+ 
+ 	return t->env[t->a].val;
