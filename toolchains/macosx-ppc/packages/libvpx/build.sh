@@ -18,22 +18,21 @@ export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 CC=/opt/macports-tff/bin/gcc-mp-4.8 \
 CFLAGS='-O3 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
-./configure \
---prefix=$PREFIX \
---disable-debug \
---disable-debug-libs \
+do_configure \
 --disable-examples \
 --disable-tools \
 --disable-docs \
---disable-install-docs \
+--disable-unit-tests \
 --disable-install-bins \
---enable-vp8 \
---enable-vp9 \
+--disable-install-srcs \
+--disable-debug \
+--disable-debug-libs \
+--disable-install-docs \
 --disable-vp8-encoder \
 --disable-vp9-encoder \
---disable-shared \
---enable-static \
---disable-unit-tests
+--size-limit=16384x16384
+
+#--enable-static \
 
 do_make verbose=yes
 do_make install
