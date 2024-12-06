@@ -1,6 +1,6 @@
 #! /bin/sh
 
-ZLIB_VERSION=1.2.13
+ZLIB_VERSION=1.3.1
 #ZLIB_SHA256=c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
