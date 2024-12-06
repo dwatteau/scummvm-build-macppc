@@ -1,6 +1,6 @@
 #! /bin/sh
 
-FLAC_VERSION=1.3.4
+FLAC_VERSION=1.3.4 # XXX: maybe time to update to 1.4?
 #FLAC_SHA256=213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -28,7 +28,9 @@ do_configure \
 --disable-stack-smash-protection --disable-rpath \
 --disable-thorough-tests --disable-doxygen-docs --disable-xmms-plugin --disable-cpplibs --disable-ogg
 
-# We don't want any Altivec code, because it's meant for POWER8/9, not PowerPC
+# We don't want any Altivec code, because the one that's left is meant for POWER8/9,
+# not PowerPC. There used to have Altivec code for G4/G5s, but is was dropped in
+# FLAC 1.3.1 (2014, not mentionned in its changelog), citing "old/broken" code.
 sed -i'.orig' -e 's/-faltivec//g' src/libFLAC/Makefile
 
 do_make -C src/libFLAC V=1
