@@ -18,7 +18,7 @@ sed -i'.orig' -e 's/^\(SUBDIRS.*\) doc/\1/' Makefile.in
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
-CC=/opt/macports-tff/bin/gcc-mp-4.8 \
+CC=/opt/macports-tff/bin/gcc-mp-7 \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure

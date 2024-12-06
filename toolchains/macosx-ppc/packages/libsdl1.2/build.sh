@@ -20,7 +20,7 @@ export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 #sed -i'.orig' -e 's/-fpascal-strings//g' configure
 
 # --enable-altivec=yes does proper runtime detection with sysctl() and
-# -faltivec on OS X, but somehow -faltivec behaves differently in gcc-mp-4.8
+# -faltivec on OS X, but somehow -faltivec behaves differently in gcc-mp (4.8/7)
 # because some Altivec instructions are still called on G3 processors (i.e.
 # -faltivec behaves like -maltivec). Ideally, non-Altivec code should
 # never appear in a -maltivec compilation unit, but SDL1.2 does this.

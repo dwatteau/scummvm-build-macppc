@@ -21,7 +21,7 @@ sed -i'.orig' \
 -e 's|-g -O2|-O2|g' \
 configure
 
-CC=/opt/macports-tff/bin/gcc-mp-4.8 \
+CC=/opt/macports-tff/bin/gcc-mp-7 \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure --disable-debug
 

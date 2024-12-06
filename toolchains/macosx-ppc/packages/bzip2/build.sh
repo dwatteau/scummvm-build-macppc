@@ -23,7 +23,7 @@ export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
 # bzip2 Makefile redefines these variables so override them here
 sed -i'.orig' -e 's|-O2 -g|-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32|g' Makefile
-do_make libbz2.a CC=/opt/macports-tff/bin/gcc-mp-4.8 #AR=$AR RANLIB=$RANLIB
+do_make libbz2.a CC=/opt/macports-tff/bin/gcc-mp-7 #AR=$AR RANLIB=$RANLIB
 
 mkdir -p "$PREFIX/lib"
 cp -f libbz2.a "$PREFIX/lib"
