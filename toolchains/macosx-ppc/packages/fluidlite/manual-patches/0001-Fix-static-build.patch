@@ -1,0 +1,33 @@
+XXX: changed because older OSX patch(1) doesn't understand the Git
+file rename syntax of the original patch
+
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -33,10 +33,11 @@ include(CheckIncludeFile)
+ check_include_file(fcntl.h HAVE_FCNTL_H)
+ 
+ list(APPEND HEADERS
+-    include/fluidlite.h
++    ${PROJECT_BINARY_DIR}/fluidlite.h
+ )
+ 
+ configure_file(src/version.cmake ${PROJECT_BINARY_DIR}/fluidlite/version.h @ONLY)
++configure_file(include/fluidlite.h.in ${PROJECT_BINARY_DIR}/fluidlite.h)
+ 
+ list(APPEND SCOPED_HEADERS
+     include/fluidlite/types.h
+--- a/include/fluidlite.h.in
++++ b/include/fluidlite.h.in
+@@ -27,6 +27,12 @@
+ extern "C" {
+ #endif
+ 
++#cmakedefine01 FLUIDLITE_BUILD_SHARED
++
++#if (FLUIDLITE_BUILD_SHARED == 0) && !defined(FLUIDLITE_STATIC)
++#define FLUIDLITE_STATIC
++#endif
++
+ #if defined(_WIN32)
+ #if defined(FLUIDLITE_STATIC)
+ #define FLUIDSYNTH_API
