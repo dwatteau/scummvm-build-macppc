@@ -1,0 +1,54 @@
+Someone recently added back some old OSX API calls to SDL1.2 on PPC:
+https://github.com/libsdl-org/SDL-1.2/pull/871
+
+Indeed, the original code checked for preprocessor values which don't
+exist on OSX PPC, and so it was never enabled.
+
+But it's been this way for years on OSX PPC, and nobody complained.
+Moreover, it looks like the older OSX API calls may have only been
+useful on pre-10.3 systems, which we don't support.
+
+Since the original PR writer doesn't appear to have tested these
+changes on OSX PPC, I prefer reverting to the previous SDL1.2
+behavior, which was effective in many official ScummVM build for
+OSX PPC without any reported issue.
+
+For more context: 
+
+http://forums.libsdl.org/viewtopic.php?p=29802
+https://github.com/libsdl-org/SDL-1.2/commit/7a877568f9250a1f6e2b77551878c06ce2f639bf
+https://github.com/libsdl-org/SDL-1.2/commit/ad8e59d08b892f00e856ca0b793f4dbc7481df65
+
+--- a/src/video/quartz/SDL_QuartzGL.m
++++ b/src/video/quartz/SDL_QuartzGL.m
+@@ -41,7 +41,7 @@
+ #define NSOpenGLPFASamples ((NSOpenGLPixelFormatAttribute) 56)
+ #endif
+ 
+-#ifdef __POWERPC__   /* we lost this in 10.7, which has no PPC support. */
++#if 0   /* we lost this in 10.6. */
+ @implementation NSOpenGLContext (CGLContextAccess)
+ - (CGLContextObj) cglContext;
+ {
+--- a/src/video/quartz/SDL_QuartzVideo.h
++++ b/src/video/quartz/SDL_QuartzVideo.h
+@@ -68,7 +68,7 @@
+ #include "../../events/SDL_events_c.h"
+ 
+ 
+-#ifdef __POWERPC__
++#if 0
+ /* 
+     This is a workaround to directly access NSOpenGLContext's CGL context
+     We need this to check for errors NSOpenGLContext doesn't support
+--- a/src/video/quartz/SDL_QuartzVideo.m
++++ b/src/video/quartz/SDL_QuartzVideo.m
+@@ -586,7 +586,7 @@
+                 QZ_TearDownOpenGL (this);
+             }
+ 
+-            #ifdef __ppc__  /* we only use this for pre-10.3 compatibility. */
++            #if 0  /* we only use this for pre-10.3 compatibility. */
+             CGLSetFullScreen (NULL);
+             #endif
+         }
