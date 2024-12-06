@@ -1,0 +1,23 @@
+Description: Disable COLRv1 support in FreeType 2.12.1.
+ FreeType 2.12.1 shipped with COLRv1 support enabled. This was unintentional,
+ as the partial implementation shipped is incomplete and incompatible with
+ the final COLRv1 API.
+ .
+ Applications attempting to use this version of the COLRv1 API will get
+ unexpected (and incorrect) results.
+Author: Hugh McMaster <hugh.mcmaster@outlook.com>
+Forwarded: not-needed
+Bug-Debian: https://bugs.debian.org/1051816
+Last-Update: 2023-09-22
+
+--- a/src/sfnt/sfdriver.c
++++ b/src/sfnt/sfdriver.c
+@@ -1220,7 +1220,7 @@
+ #define PUT_SVG_SUPPORT( a )  NULL
+ #endif
+ 
+-#define PUT_COLOR_LAYERS_V1( a )  PUT_COLOR_LAYERS( a )
++#define PUT_COLOR_LAYERS_V1( a )  NULL
+ 
+ #ifdef TT_CONFIG_OPTION_POSTSCRIPT_NAMES
+ #define PUT_PS_NAMES( a )  a
