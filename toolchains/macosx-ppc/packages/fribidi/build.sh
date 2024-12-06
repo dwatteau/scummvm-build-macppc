@@ -1,6 +1,6 @@
 #! /bin/sh
 
-FRIBIDI_VERSION=1.0.12
+FRIBIDI_VERSION=1.0.15
 #FRIBIDI_SHA256=30f93e9c63ee627d1a2cedcf59ac34d45bf30240982f99e44c6e015466b4e73d
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

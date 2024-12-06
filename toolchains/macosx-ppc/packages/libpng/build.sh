@@ -1,6 +1,6 @@
 #! /bin/sh
 
-LIBPNG_VERSION=1.6.39
+LIBPNG_VERSION=1.6.44
 #LIBPNG_SHA256=af4fb7f260f839919e5958e5ab01a275d4fe436d45442a36ee62f73e5beb75ba
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -27,10 +27,15 @@ do_make
 # Don't install man pages and binaries
 do_make install-libLTLIBRARIES \
 	install-binSCRIPTS \
-	install-exec-hook \
-	install-nodist_pkgincludeHEADERS \
 	install-pkgconfigDATA \
 	install-pkgincludeHEADERS \
-	install-data-hook
+	install-nodist_pkgincludeHEADERS
+
+# As we install everything manually we must handle dependencies ourselves
+# Run these after the other ones as they depend on them
+do_make install-header-links \
+	install-library-links \
+	install-libpng-pc \
+	install-libpng-config
 
 do_clean_bdir
