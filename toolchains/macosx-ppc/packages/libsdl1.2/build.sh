@@ -1,9 +1,6 @@
 #! /bin/sh
 
-# note: avoiding later 7a877568f9250a1f6e2b77551878c06ce2f639bf on purpose
-# because that Darwin PPC change restored 10.3 and older "worse" APIs, and
-# more importantly that change has been merged without any test...
-SDL_VERSION=d95c1a4bbd644baba748d341b03141e5f0481ae6
+SDL_VERSION=0237f339e6bec39c56e1364787fabdb0245d478f
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 HELPERS_DIR=$PACKAGE_DIR/../../../common
