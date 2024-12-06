@@ -25,12 +25,11 @@ do_configure \
 --disable-unit-tests \
 --disable-install-bins \
 --disable-install-srcs \
---disable-debug \
---disable-debug-libs \
---disable-install-docs \
+--size-limit=16384x16384 \
 --disable-vp8-encoder \
 --disable-vp9-encoder \
---size-limit=16384x16384
+--disable-debug \
+--disable-debug-libs
 
 #--enable-static \
 
