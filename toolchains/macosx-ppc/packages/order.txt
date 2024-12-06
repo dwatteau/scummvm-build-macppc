@@ -1,21 +1,29 @@
+# for every directory in this list, do:
+# env PREFIX=/staticscummvm ./build.sh
+
 zlib
 bzip2
 
-a52dec
-faad2
-freetype
-fribidi
-giflib
-libjpeg-turbo
-libmad
-libmpeg2
-libmikmod
 libpng
-libvpx
+libjpeg-turbo
+giflib
 
-flac
+faad2
+libmad
 libogg
 libtheora
 libvorbis
+flac
+libmikmod
+sonivox
+
+mpeg2dec
+a52dec
+libmpcdec
+libvpx
+
+fluidlite
+freetype
+fribidi
 
 libsdl1.2
