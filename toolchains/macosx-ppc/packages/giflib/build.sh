@@ -15,7 +15,7 @@ do_http_fetch giflib "https://download.sourceforge.net/project/giflib/giflib-${G
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
-CC=/opt/macports-tff/bin/gcc-mp-4.8 \
+CC=/opt/macports-tff/bin/gcc-mp-7 \
 make libgif.a CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32 -std=gnu99 -Wall'
 
 install -d -m 0755 "$PREFIX/lib"
