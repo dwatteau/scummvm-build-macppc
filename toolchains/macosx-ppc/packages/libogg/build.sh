@@ -15,6 +15,8 @@ do_http_fetch libogg "http://ftp.oregonstate.edu/.1/xiph/releases/ogg/libogg-${L
 # Avoid compiling and installing doc
 sed -i'.orig' -e 's/^\(SUBDIRS.*\) doc/\1/' Makefile.in
 
+sed -i'.orig' -e 's/-O4 -Wall /-Wall /g' configure
+
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
