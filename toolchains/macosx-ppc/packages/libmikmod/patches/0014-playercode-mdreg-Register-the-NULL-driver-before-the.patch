@@ -1,0 +1,37 @@
+From: Gergely Nagy <algernon@madhouse-project.org>
+Date: Fri, 21 Dec 2012 16:07:43 +0100
+Subject: playercode/mdreg: Register the NULL driver before the file writers
+
+Register the NULL driver sooner, as having no sound is preferable to
+writing to music.raw: file writing should be used only when explicitly
+selected.
+
+Reported-by: Simon McVittie <smcv@debian.org>
+Closes: #690943
+Signed-off-by: Gergely Nagy <algernon@madhouse-project.org>
+---
+ playercode/mdreg.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/playercode/mdreg.c
++++ b/playercode/mdreg.c
+@@ -129,6 +129,9 @@
+ 	_mm_registerdriver(&drv_sb);
+ #endif
+ 
++	/* Register 'nosound' driver */
++	_mm_registerdriver(&drv_nos);
++
+ 	/* Register disk writers */
+ #ifdef DRV_WAV
+ 	_mm_registerdriver(&drv_wav);
+@@ -147,9 +150,6 @@
+ #if defined(DRV_STDOUT) && !defined(macintosh)
+ 	_mm_registerdriver(&drv_stdout);
+ #endif
+-
+-	/* Register 'nosound' driver */
+-	_mm_registerdriver(&drv_nos);
+ }
+ 
+ MIKMODAPI void MikMod_RegisterAllDrivers(void)

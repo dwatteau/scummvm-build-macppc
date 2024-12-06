@@ -1,5 +1,7 @@
 #! /bin/sh
 
+# TODO: look at openmpt for the next major ScummVM release?
+# it has SO3 support (for sludge) engine.
 LIBMIKMOD_VERSION=3.3.11.1
 #LIBMIKMOD_SHA256=XXX
 
