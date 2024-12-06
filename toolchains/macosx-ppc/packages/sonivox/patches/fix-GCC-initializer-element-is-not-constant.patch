@@ -1,0 +1,27 @@
+Fix "initializer element is not constant" error with GCC
+
+--- a/arm-wt-22k/lib_src/wt_200k_G.c
++++ b/arm-wt-22k/lib_src/wt_200k_G.c
+@@ -100,18 +100,18 @@
+ */
+ 
+ #ifdef _SAMPLE_RATE_44100
+-const EAS_U32 sampleRate = 0xAC44;
++enum { sampleRate = 0xAC44 };
+ #else
+-const EAS_U32 sampleRate = 0x5622;
++enum { sampleRate = 0x5622 };
+ #endif
+ 
+ const S_EAS easSoundLib = {
+     0x01534145,
+ 
+ #if defined (_8_BIT_SAMPLES)
+-    0x00100000 | sampleRate,
++    0x00100000 | (EAS_U32)sampleRate,
+ #else //_16_BIT_SAMPLES
+-    0x00200000 | sampleRate,
++    0x00200000 | (EAS_U32)sampleRate,
+ #endif
+ 
+     eas_banks,
