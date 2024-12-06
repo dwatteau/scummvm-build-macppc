@@ -15,16 +15,16 @@ do_http_fetch faad2 "https://github.com/knik0/faad2/archive/2.10.1/faad-${FAAD2_
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
-/opt/macports-tff/bin/autoreconf -vif
+# Avoid compiling and installing libfaad2_drm
+sed -i'.orig' -e 's/^\(lib_LTLIBRARIES.*\) libfaad_drm.la/\1/' libfaad/Makefile.am
+
+/opt/macports-tff/bin/autoreconf -fi
 
 CC=/opt/macports-tff/bin/gcc-mp-7 \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 ac_cv_prog_cc_c11=no \
 do_configure --with-drm=no
-
-# Avoid compiling and installing libfaad2_drm
-sed -i'.orig' -e 's/^\(lib_LTLIBRARIES.*\) libfaad_drm.la/\1/' libfaad/Makefile
 
 do_make -C libfaad
 do_make -C libfaad install
