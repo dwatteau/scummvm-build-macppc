@@ -1,0 +1,24 @@
+pthread_setname_np() doesn't exist before OSX 10.6
+
+--- a/vpx_util/vpx_thread.c
++++ b/vpx_util/vpx_thread.c
+@@ -27,6 +27,10 @@
+ 
+ #if CONFIG_MULTITHREAD
+ 
++#ifdef __APPLE__
++#include <AvailabilityMacros.h>
++#endif
++
+ struct VPxWorkerImpl {
+   pthread_mutex_t mutex_;
+   pthread_cond_t condition_;
+@@ -39,7 +43,7 @@ static void execute(VPxWorker *const worker);  // Forward declaration.
+ 
+ static THREADFN thread_loop(void *ptr) {
+   VPxWorker *const worker = (VPxWorker *)ptr;
+-#ifdef __APPLE__
++#if defined(__APPLE__) && MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+   if (worker->thread_name != NULL) {
+     // Apple's version of pthread_setname_np takes one argument and operates on
+     // the current thread only. The maximum size of the thread_name buffer was
