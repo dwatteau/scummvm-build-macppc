@@ -16,7 +16,7 @@ RANLIB=/opt/macports-tff/bin/ranlib \
 STRINGS=/opt/macports-tff/bin/strings \
 STRIP=/opt/macports-tff/bin/strip \
 CPPFLAGS='-I/staticscummvm/include' \
-CXXFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
+CXXFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-headerpad_max_install_names -L/staticscummvm/lib' \
 ./configure \
 --with-staticlib-prefix=/staticscummvm \
