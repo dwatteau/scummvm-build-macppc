@@ -1,0 +1,52 @@
+XXX, UNSURE
+
+on big-endian chars, the 'size' field of chunks, and the sample data are
+byte-swapped. But this produces wrong values on OSXPPC.
+
+I can't say if nobody tested this code path on a big-endian machine for
+years in FluidSynth/FluidLite, or if the bug lies elsewhere (e.g. in
+ScummVM itself or just in the dragons engine?)
+
+XXX: needs more testing before I enable fluidlite in the builds, then
+
+--- a/src/fluid_defsfont.c
++++ b/src/fluid_defsfont.c
+@@ -544,7 +544,6 @@
+ fluid_defsfont_load_sampledata(fluid_defsfont_t* sfont, fluid_fileapi_t* fapi)
+ {
+   fluid_file fd;
+-  unsigned short endian;
+   fd = fapi->fopen(fapi, sfont->filename);
+   if (fd == NULL) {
+     FLUID_LOG(FLUID_ERR, "Can't open soundfont file");
+@@ -566,11 +565,9 @@
+   }
+   fapi->fclose(fd);
+ 
+-  /* I'm not sure this endian test is waterproof...  */
+-  endian = 0x0100;
+-
+   /* If this machine is big endian, the sample have to byte swapped  */
+-  if (((char *) &endian)[0]) {
++#if defined(WORDS_BIGENDIAN) && 0 /* XXX */
++  {
+     unsigned char* cbuf;
+     unsigned char hi, lo;
+     unsigned int i, j;
+@@ -583,6 +580,7 @@
+       sfont->sampledata[i] = s;
+     }
+   }
++#endif
+   return FLUID_OK;
+ }
+ 
+@@ -1892,7 +1890,7 @@
+ #define READCHUNK(var,fd,fapi)	G_STMT_START {      \
+ 	if (fapi->fread(var, 8, fd) == FLUID_FAILED)			\
+ 	return(FAIL);					\
+-	((SFChunk *)(var))->size = GUINT32_FROM_BE(((SFChunk *)(var))->size);  \
++	/*((SFChunk *)(var))->size = GUINT32_FROM_BE(((SFChunk *)(var))->size);*/  \
+ } G_STMT_END
+ #else
+ #define READCHUNK(var,fd,fapi)	G_STMT_START {      \

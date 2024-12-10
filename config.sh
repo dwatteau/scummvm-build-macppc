@@ -37,6 +37,8 @@ LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-headerpad_max_install_names -L/static
 --disable-sparkle \
 --disable-tts \
 --disable-updates \
+--disable-fluidlite \
+--disable-fluidsynth \
 --enable-taskbar
 
 #perl -pi -e 's/-O2 /-O0 /g' config.mk
