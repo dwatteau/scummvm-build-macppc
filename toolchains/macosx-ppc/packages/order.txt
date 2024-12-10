@@ -22,7 +22,10 @@ a52dec
 libmpcdec
 libvpx
 
-fluidlite
+# NOT READY YET
+# issues e.g. with Blazing Dragons and big-endian soundfount compat
+#fluidlite
+
 freetype
 fribidi
 
