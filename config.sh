@@ -9,7 +9,7 @@ export PATH=/staticscummvm/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
-CXX='/usr/local/bin/ccache /opt/macports-tff/bin/g++-mp-4.8' \
+CXX='/usr/local/bin/ccache /opt/macports-tff/bin/g++-mp-7' \
 AR=/opt/macports-tff/bin/ar \
 LD=/opt/macports-tff/bin/ld-97 \
 RANLIB=/opt/macports-tff/bin/ranlib \
@@ -45,7 +45,7 @@ LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-headerpad_max_install_names -L/static
 
 # USE_CURL= because we don't trust this on old macOS
 /opt/macports-tff/bin/gmake USE_CURL=
-exit 0
+#exit 0
 
 /opt/macports-tff/bin/gmake USE_CURL= bundle
 
