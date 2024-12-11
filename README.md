@@ -1,6 +1,6 @@
 # Building ScummVM on OSX PPC (Tiger, Leopard)
 
-This started as a quick'n'dirty fork of <https://github.com/scummvm/dockerized-bb>. The idea was to have a set of scripts to build modern releases of ScummVM for OSX PPC (10.4, 10.5), and its required libraries. The build scripts remain similar to what's used in the `dockerized-bb` repo, and they mostly follow what's used for the other builds of ScummVM, whenever possible. It does *not* use the real `dockerized-bb` infrrastructure.
+This repository hosts the scripts used to build current releases of ScummVM for OSX PPC (10.4, 10.5), and its required libraries.
 
 ## Requirements
 
@@ -31,7 +31,7 @@ cd toolchains/macosx-ppc
 
 The required libraries are going to be built as *static* libraries, put in `/staticscummvm`.
 
-If you want to use a pre-built set of libraries, you may look at [the Releases page](https://github.com/dwatteau/scummvm-build-macppc/releases) for a `.zip` archive that can extract to `/staticscummvm`.
+If you want to use a pre-built set of libraries, you may look at [the Releases page](https://github.com/dwatteau/scummvm-build-macppc/releases) for a `.zip` archive that should be extracted into `/staticscummvm`.
 
 Otherwise, if you want to build things yourself: 
 
@@ -53,7 +53,9 @@ If you see any "`ERROR`" printed as the last line in the script, something went 
 
 ### Fetching the ScummVM source code
 
-If you know about Git, use Git. It's available in `/opt/macports-tff/bin/git` (albeit an older release) once the Unofficial TenFourFox Development Toolkit is properly installed. Of course, remember that you're going requests to the Internet with an OS that's hasn't received any security update for more than a decade.
+If you know about Git, use Git. It's available in `/opt/macports-tff/bin/git` (albeit an older release) once the Unofficial TenFourFox Development Toolkit is properly installed.
+
+Of course, remember that you're doing requests to the Internet with an OS that's hasn't received any security update for more than a decade!
 
 ```sh
 mkdir -p ~/git
@@ -153,3 +155,7 @@ Then, after doing an `--disable-optimizations --enable-debug` build (warning: if
 ```
 
 Running GDB on the official releases for OSX PPC is not going to be really helpful, because they're built with optimizations and no debug information.
+
+## About this repository
+
+This started as a quick'n'dirty fork of <https://github.com/scummvm/dockerized-bb>, in order to build the ScummVM dependencies as closely as what's used for the automated builds of ScummVM. The build scripts remain similar to what's used in the upstream `dockerized-bb` repo, and they mostly follow the patches, releases and build options used for building the other ScummVM ports, whenever possible. The scripts hosted here do *not* use the real `dockerized-bb` infrastructure; they're native builds.
