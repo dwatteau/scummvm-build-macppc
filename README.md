@@ -79,7 +79,12 @@ git clone https://github.com/scummvm/scummvm.git
 It's going to take a while.
 
 If you don't know Git, and just want to build a particular fixed ScummVM release yourself, you may fetch a *tarball* with the source code, for example:  
-<https://downloads.scummvm.org/frs/scummvm/2.8.1/scummvm-2.8.1.tar.bz2> 
+<https://downloads.scummvm.org/frs/scummvm/2.8.1/scummvm-2.8.1.tar.bz2>
+
+and just extract it this way:
+```sh
+tar xjf /path/to/scummvm-2.8.1.tar.bz2
+```
 
 ### Doing your own ScummVM build
 
@@ -168,6 +173,35 @@ Then, after doing an `--disable-optimizations --enable-debug` build (warning: if
 ```
 
 Running GDB on the official releases for OSX PPC is not going to be really helpful, because they're built with optimizations and no debug information.
+
+### I have a `GNU Make 3.81 or higher is required` error when trying to build ScummVM
+
+The `/usr/bin/make` that's part of OSX 10.4 is way too old (the one on OSX 10.5 is fine, though).
+
+Use the `/opt/macports-tff/bin/gmake` binary provided by the toolkit, instead.
+
+### I'm getting an `hdiutil` error when building the `ScummVM-snapshot.dmg` file
+
+It looks like `hdiutil` may randomly fail when run from OSX 10.4. Just run the same command again and it should work. Yes, strange.
+
+### How do I test that a ScummVM build works on non-Altivec CPUs, if I don't have one?
+
+OSX 10.4 can be made to run without Altivec support with the following boot setting:
+
+```sh
+sudo nvram boot-args="novmx=1"
+```
+
+and then, reboot. Then, try your ScummVM binary, with as many settings as possible (OpenGL renderer, SDL renderer, running a game engine with JPEG/MPEG2 decoding...).
+
+To revert to the default boot settings, type `sudo nvram boot-args=""` instead.
+
+If you want to be sure whether Altivec/VMX is enabled/disabled, run this command: 
+```sh
+sysctl hw.optional.altivec
+```
+
+where `1` in the output means that it's available, and `0` means it's unavailable. 
 
 ## About this repository
 
