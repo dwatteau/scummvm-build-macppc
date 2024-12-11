@@ -2,6 +2,9 @@ Avoid setting envelope cursors to negative values
 
 from OpenBSD, and mikmod's original author
 
+XXX: is it really useful for us? is it part of the library or just
+the player binary?
+
 --- a/playercode/mplayer.c.orig	Mon Apr 27 04:51:00 2015
 +++ b/playercode/mplayer.c	Fri Mar 18 07:39:21 2016
 @@ -368,9 +368,9 @@ static SWORD StartEnvelope(ENVPR *t,UBYTE flg,UBYTE pt

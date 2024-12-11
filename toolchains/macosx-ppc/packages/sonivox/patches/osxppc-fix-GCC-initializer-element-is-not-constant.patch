@@ -1,4 +1,7 @@
-Fix "initializer element is not constant" error with GCC
+Fix "initializer element is not constant" error with GCC < 8.1
+
+To be merged in next release:
+https://github.com/pedrolcl/sonivox/pull/29
 
 --- a/arm-wt-22k/lib_src/wt_200k_G.c
 +++ b/arm-wt-22k/lib_src/wt_200k_G.c
