@@ -18,6 +18,19 @@ This repository hosts the scripts used to build current releases of ScummVM for 
 
 ## Build procedure
 
+### Optional: install ccache
+
+`ccache` can be used to speed up the compilation times, when you have to rebuild a source tree that hasn't changed too much since your last build. It's not part of the base system or part of the toolkit, so the easiest way is to build it from source yourself.
+
+Download the older 3.7.12 release here: <https://github.com/ccache/ccache/releases/download/v3.7.12/ccache-3.7.12.tar.gz> (newer releases are more complex to build, and this release is just fine).
+
+```sh
+tar xzf ccache-3.7.12.tar.gz
+cd ccache-3.7.12
+CC=/usr/bin/gcc-4.0 ./configure --with-bundled-zlib
+make && sudo make install
+```
+
 ### Installing the required dependencies
 
 You need to copy and work from *this* repository.

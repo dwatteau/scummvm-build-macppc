@@ -9,7 +9,18 @@ export PATH=/staticscummvm/bin:/usr/bin:/bin:/usr/sbin:/sbin
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
-CXX='/usr/local/bin/ccache /opt/macports-tff/bin/g++-mp-7' \
+USE_CCACHE=${USE_CCACHE:-yes}
+
+CCACHE_PREFIX=
+if [ "$USE_CCACHE" = yes ]; then
+	if [ ! -e /usr/local/bin/ccache ]; then
+		echo "WARNING: /usr/local/bin/ccache not found, not using it..." >&2
+	else
+		CCACHE_PREFIX='/usr/local/bin/ccache '
+	fi
+fi
+
+CXX="${CCACHE_PREFIX}/opt/macports-tff/bin/g++-mp-7" \
 AR=/opt/macports-tff/bin/ar \
 LD=/opt/macports-tff/bin/ld-97 \
 RANLIB=/opt/macports-tff/bin/ranlib \
