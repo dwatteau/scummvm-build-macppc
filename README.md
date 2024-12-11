@@ -11,7 +11,7 @@ This repository hosts the scripts used to build current releases of ScummVM for 
 - Xcode 2.4.1/2.5 for Tiger or 3.0/3.1 for Leopard (available from the [Apple Developer website](https://developer.apple.com/downloads/))
 - Downloading and installing the *Unofficial TenFourFox Development Toolkit*
     - (A quick online search should tell you how to get and install it)
-    - WARNING: I use the toolkit dated from 2021, not the newer ones. There's no particular reason for me not to upgrade it, except that it works. If you install a newer toolkit, you may run into some issues.
+    - WARNING: I use the toolkit dated from 2021 (`Unofficial_TenFourFox_Developer_Toolkit_-_Tiger_2.dmg`), not the newer ones. There's no particular reason for me not to upgrade it, except that it works. If you install a newer toolkit, you may run into some issues.
 - Installing [the required dependencies](#installing-the-required-dependencies)
 - Fetching the [ScummVM source code](#fetching-the-scummvm-source-code)
 - Doing your [own build of ScummVM](#doing-your-own-scummvm-build)
