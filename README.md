@@ -1,133 +1,155 @@
-ScummVM dockerized BuildBot
-===========================
+# Building ScummVM on OSX PPC (Tiger, Leopard)
 
-Quick setup
------------
+This started as a quick'n'dirty fork of <https://github.com/scummvm/dockerized-bb>. The idea was to have a set of scripts to build modern releases of ScummVM for OSX PPC (10.4, 10.5), and its required libraries. The build scripts remain similar to what's used in the `dockerized-bb` repo, and they mostly follow what's used for the other builds of ScummVM, whenever possible. It does *not* use the real `dockerized-bb` infrrastructure.
 
-To setup the whole thing:
+## Requirements
 
- - `apt install docker.io git make m4 acl`
- - `useradd -Um -s /bin/bash buildbot`
- - `usermod -aG docker buildbot`
- - `apt install \  
-	python3-autobahn \  
-	python3-cryptography \  
-	python3-dateutil \  
-	python3-docker \  
-	python3-future \  
-	python3-jinja2 \  
-	python3-jwt \  
-	python3-migrate \  
-	python3-sqlalchemy \  
-	python3-twisted \  
-	python3-venv \  
-	python3-yaml`
- - `su - buildbot`
- - `python3 -m venv --system-site-packages buildbot-master`
- - `. buildbot-master/bin/activate`
- - `git clone repo`
- - `cd dockerized-bb`
- - `cp buildbot-config/config.py.example buildbot-config/config.py` and edit config.py to fit your needs
- - If you don't want to build all toolchains and all workers, `cp Makefile.user.example Makefile.user` and edit Makefile.user to fit your needs (example configuration downloads all workers and doesn't build anything)
- - `make master`
- - `make workers`
- - `cp contrib/buildbot.service /etc/systemd/system/buildbot.service` and adapt paths and user
- - As root: `systemctl daemon-reload && systemctl enable buildbot && systemctl start buildbot`
+- An OSX 10.4 or 10.5 PPC system. (Cross-compiling from i386 10.4/10.5 is untested and unsupported. Same thing applies to Sorbet Leopard.)
+    - **IMPORTANT:** If you want to have a build that's going to work on both OSX 10.4 and 10.5, you need to build from a 10.4 box. That's because the libstdc++ C++11 library that's part of the toolkit is only built for the current system. So, even though the dependencies and ScummVM itself will properly target OSX 10.4, you won't be able to run it on OSX 10.4 if you use the C++11 toolkit made for 10.5.
+    - If you're just doing a build for yourself on your own OSX 10.5 machine, you don't care, and you *can* build from OSX 10.5. Just don't redistribute it to 10.4 users.
+- Reasonnable knowledge of the Terminal and the Unix shell
+- Xcode 2.4.1/2.5 for Tiger or 3.0/3.1 for Leopard (available from the [Apple Developer website](https://developer.apple.com/downloads/))
+- Downloading and installing the *Unofficial TenFourFox Development Toolkit*
+    - (A quick online search should tell you how to get and install it)
+    - WARNING: I use the toolkit dated from 2021, not the newer ones. There's no particular reason for me not to upgrade it, except that it works. If you install a newer toolkit, you may run into some issues.
+- Installing [the required dependencies](#installing-the-required-dependencies)
+- Fetching the [ScummVM source code](#fetching-the-scummvm-source-code)
+- Doing your [own build of ScummVM](#doing-your-own-scummvm-build)
 
-Master configuration
---------------------
+## Build procedure
 
-Buildbot master is located in `buildbot-config` and spread across several files:
+### Installing the required dependencies
 
-  - `steps.py`: defines all custom steps needed by ScummVM
-  - `config.py`: contains configuration which directly depends on the local setup and administrator choices,
-  - `builds.py`: configures all the build steps for each project. There si one class for all projects variant (ScummVM, ScummVM tools) and each variant (master, stable, whatever) is registered using the previous class,
-  - `platforms.py`: describes all the platforms specific configurations. These can be specialized depending on build run.
-  - `workers.py`: defines the various workers types used by BuildBot. There are currently 2 of them: fetcher and builder.
-    While fetcher is responsible to fetch and trigger actual builds, builder is instantiated based on the build platform.
-  - `ui.py`: contains all user interface related configurations.
-  - `master.cfg`: the file loaded by BuildBot and defines the `BuildmasterConfig` object based on the other files.
+You need to copy and work from *this* repository.
 
-New platforms get defined in `platforms.py`.
+Check that you meet the requirements (*TODO:* very lightweight tests at the moment):
+```sh
+cd /path/to/this/scummvm-build-macppc
+cd toolchains/macosx-ppc
+./prepare.sh
+```
 
-New projects (GSoC for example) are added to `builds.py`.
+The required libraries are going to be built as *static* libraries, put in `/staticscummvm`.
 
-Workers get started on demand and stopped when they are not needed anymore. That avoids idling containers taking memory and CPU cycles. They use a local network created at buildbot startup.
-All the data that gets generated by build processes is stored in `buildbot-data` at the root of the repository. There is the source, build objects, packages and ccache directory. All of this is created at buildbot startup.
-Android build system stores downloaded file there as weel to avoid downloading them at every build.
-Docker images are started readonly to avoid storing modifications and to have reproductible build process.
+If you want to use a pre-built set of libraries, you may look at [the Releases page](https://github.com/dwatteau/scummvm-build-macppc/releases) for a `.zip` archive that can extract to `/staticscummvm`.
 
-`make master` installs buildbot and generates a `buildbot.tac` file in directory specified by `BUILDBOT_BASEDIR` in Makefile.
+Otherwise, if you want to build things yourself: 
 
-Workers generation
-------------------
+```sh
+for lib in $(grep -vE '^\s*$|^#' packages/order.txt) ; do
+  echo "About to build: $lib"
+  cd "packages/$lib" && env PREFIX=/staticscummvm ./build.sh
+  if [ $? -ne 0 ]; then
+    echo "ERROR: Building library $lib failed!"
+    break
+  fi 
+  cd ../..
+done
+```
 
-Workers are using Docker to run. All the workers images are defined through Dockerfiles in `workers` directory.
+It shouldn't take too long.
 
-Dockerfile if ending with `.m4` extension is preprocessed using the GNU m4 preprocessor.
-While its syntax is quite... oldish, it doesn't clash with Dockerfile one like C preprocessor does and it's heavily available.
+If you see any "`ERROR`" printed as the last line in the script, something went wrong. Contact me if necessary.
 
-Each worker has its image data located in its own directory. So `debian-x86-64` data resides in `workers/debian-x86-64` directory.
-M4 Dockerfiles include parts from common directory to avoid reapeating over and over the same instructions.
-This lets more latitude to create images than creating a base image with all buildbot tools and deriving from it.
+### Fetching the ScummVM source code
 
-To create a worker for a new platform, one should create a new toolchain with everything ready in it.
-This lets split between toolchain creation process and instanciation with buildbot tools for ScummVM use.
-To be compliant with Makefile rules, worker need a toolchain with the same name or no toolchain at all.
-You don't need a toolchain if the worker can easily pull all libraries it needs directly from repositories (like for the Debian platforms).
+If you know about Git, use Git. It's available in `/opt/macports-tff/bin/git` (albeit an older release) once the Unofficial TenFourFox Development Toolkit is properly installed. Of course, remember that you're going requests to the Internet with an OS that's hasn't received any security update for more than a decade.
 
-To create a custom worker, Dockerfile should:
-  - create a new image with the same base that the toolchain one (to have matching host libraries),
-  - install buildbot in it (if base image is debian, you can use `debian-builder-base.m4`),
-  - define `HOST` and `PREFIX` environment variables,
-  - copy the `PREFIX` directory from the toolchain,
-  - define the same environment as in the toolchain (the PATH can be adjusted to make build process more easy),
-  - finish buildbot configuration (using `run-buildbot.m4`).
+```sh
+mkdir -p ~/git
+cd ~/git
+git clone https://github.com/scummvm/scummvm.git
+```
 
-`make workers` just runs `docker build` on every directory in `workers` using GNU m4 when needed. It handles files modifications and toolchain dependency.
-It also handles user preferences and downloads workers when build isn't desirable.
+It's going to take a while.
 
-Toolchains generation
----------------------
+If you don't know Git, and just want to build a particular fixed ScummVM release yourself, you may fetch a *tarball* with the source code, for example:  
+<https://downloads.scummvm.org/frs/scummvm/2.8.1/scummvm-2.8.1.tar.bz2> 
 
-A toolchain is a collection of compiler, binutils and libraries needed to compile ScummVM. They are installed in a specified prefix and shouldn't polluate the image filesystem.
+### Doing your own ScummVM build
 
-There is one common image `toolchains/common` to help generating toolchains. It just contains the scripts and no operating system.
-Toolchains generation images just copy files from this base image when needed (like in `windows-x86_64`).
+The idea is to go the directory with the ScummVM source code, and call the `config.sh` that's at the root of this OSXPPC build repository:
 
-When a custom toolchain has to be built, Dockerfile should:
+```sh
+cd /path/to/scummvm/source
+bash /path/to/this/scummvm-build-macppc/config.sh
+```
 
-  - define `HOST` and `PREFIX` environment variables,
-  - build or install a compiler, a libc and binutils at the prefix place,
-  - define environment with all new installed binaries,
-  - install prebuilt libraries if available,
-  - copy missing libraries build rules from `common/toolchain` or local build context,
-  - run the rules.
+This will do a full build of ScummVM with all its stable engines, and compiler optimizations turned on. If built from OSX 10.4, compatibility with OSX 10.4/10.5 and G3 to G5 systems should work out of the box.
 
-`make toolchains` just runs `docker build` on every directory in `toolchains` using GNU m4 when needed.
-It also handles user preferences and downloads toolchains when build isn't desirable.
+Build time for a full optimized build can take several hours, depending on the machine you have. You can change the `gmake` call to `gmake -j2` if you have a Dual G5, `gmake -j4` if you have a Quad G5, etc.
 
-Apple toolchains
-----------------
+The build script should produce a `ScummVM-snapshot.dmg` image as a final output.
 
-Apple toolchains need SDKs which aren't publicly available.
-The toolchain `apple-sdks` extracts them from Xcode packages.
-For this you need an AppleID account and download Xcode packages needed by the toolchain.
-They must be placed in `toolchains/apple-sdks` directory.
-In some (if not all) versions of Docker, if the files are larger than 4G, building of image will fail.
-You can use the command `split -b2G toolchains/apple-sdks/<filename>.xip toolchains/apple-sdks/<filename>.xip.` to make small parts of it.
-File will be joined back in the building process.
+If you know what you're doing, you can have a look at that `config.sh` script and adjust it to your needs.
 
-Credits
--------
+## FAQ
 
-Many parts of this repository come from Colin Snover's work at <https://github.com/csnover/scummvm-buildbot>.  
-Thanks to him.
+## With which CPUs and OSX releases are supported?
 
-TODO
-----
+OSX 10.4 (Tiger) and OSX 10.5 (Leopard), on PowerPC systems. (It should also work for users of so-called "Sorbet Leopard", but it's untested.)
 
-There are still many things to do:
+It can also be made to run on Intel/i386 Snow Leopard (OSX 10.5) through Rosetta 1. It's not officially supported, though.
 
-  - create all platforms images and add them to master configuration,
-  - other things I must have forgot...
+The resulting app should be compatible with G3, G4 and G5 processors. Yes, I try to take care of not breaking G3 (or non-Altivec) compatibility (although my own testing on G3 is lightweight).
+
+## Do you plan on adding support for older OSX releases, such as 10.2 or 10.3?
+
+Very unlikely. Building for OSX 10.4 is already quite difficult; going back to 10.3 would mean even more work, and I don't have much interest in that myself. I do know that older OSX releases run better on G3s. But unless someone wants to contribute on this, I don't think I will do that myself.
+
+The biggest problem is that there's no C++11 toolchain for OSX 10.3, AFAICS.
+
+[ScummVM 1.6.0](https://downloads.scummvm.org/frs/scummvm/1.6.0/scummvm-1.6.0-macosx.dmg) (2013) has been confirmed to work on OSX 10.3. Maybe some releases between ScummVM 1.6.0 and ScummVM 2.5.0 still worked on OSX 10.3; but this has been untested.
+
+ScummVM 2.5.x (2021; the last release not requiring a C++11 compiler) *could* be made to work on OSX 10.3 without too much work, in theory. I don't have any OSX 10.3 system to do this, and it's not in my priorities either to work on this. But if someone can lend me access to an OSX 10.3 system, I could maybe try working on doing a "final" build of ScummVM for Panther, *if time permits*.
+
+## Do you plan on doing an optimized build for G4s/Altivec/G5s or 10.4-10.6 Intel?
+
+Since ScummVM mostly (but not only!) targets "old games", I haven't seen any reason to spend time on this, so far. I don't think there were could be much performance improvement. Building a multi-architecture binary would require even more work, so my time is probably better spent on other areas, for the moment.
+
+The performance improvements between late PPC systems and OSX 10.4/10.5/10.6 Intel means that most of the games appear to work fine, even when using Rosetta 1 to translate the PowerPC code to x86 code. So, I don't see the point in doing an i386 build for i386 Tiger/Leopard/Snow Leopard either.
+
+Also, it appears (from some MacRumors forum discussions) that the GCC 7.5 compiler that's used to build ScummVM may have various unfixed bugs when targeting ppc64 (which is necessary for a G5-optimized build). So if someone wants a G5 build, it may need necessary to either downgrade to the GCC 4.8 compiler included the toolkit (which was used to build OSXPPC releases for ScummVM 2.6 to 2.8), or upgrade to a newer compiler, such as GCC ≥ 10. For now (2024), a unique, stable and (mostly) reproducible build is preferred.
+
+## When aren't you using MacPorts for the toolchain/dependencies?
+
+The work done by MacPorts for preserving OSX 10.4/10.5 PPC compatibility is amazing. But it's a moving target; what works in January may not build anymore in March, because the whole MacPorts tree is always being updated, and regressions happen. Also, bootstraping the full C++11 toolchain (and some other tools such as `cmake`, `git`…) is really, really slow.
+
+The Unofficial TenFourFox Development Toolkit just works out of the box, and its results are reproducible.
+
+## How to run a debugger on ScummVM for OSX PPC?
+
+Get a [newer GDB from the old TenFourFox files](https://sourceforge.net/projects/tenfourfox/files/tools/), called `gdb768-104fx-3.tar.gz`. Get *exactly* this one.
+
+Using your own GDB binary requires special permissions, documented here for example:
+
+* <https://sourceware.org/gdb/wiki/PermissionsDarwin>
+* <http://gridlab-d.shoutwiki.com/wiki/Mac_OSX/Setup>
+
+It looks like trying to make this work on OSX 10.5 is pointless. So OSX 10.4 may be a hard requirement!
+
+Ensure there's a `-p` option set up in the file below:
+```sh
+cat /System/Library/LaunchDaemons/com.apple.taskgated.plist
+```
+
+And then allow your current user to run this GDB binary with particular privileges:
+
+```sh
+sudo dseditgroup -o edit -a YOURUSERNAMEHERE -t user procmod
+sudo chgrp procmod /path/to/extracted/archive/above/gdb # parent directory may also need 'chmod g+s'?
+```
+
+and then reboot for the changes to take effect.
+
+Then, after doing an `--disable-optimizations --enable-debug` build (warning: if you don't use `--enable-plugins --default-dynamic`, building too many engines will trigger internal linker errors. So, if you need to particular a particular engine, do your ScummVM debug build with `--disable-detection-full --disable-all-engines --enable-engine=your-engine-name`):
+
+```sh
+/path/to/extracted/archive/above/gdb -q ./path/to/debug/scummvm
+(gdb) run
+
+(gdb) bt
+(gdb) bt full
+```
+
+Running GDB on the official releases for OSX PPC is not going to be really helpful, because they're built with optimizations and no debug information.
