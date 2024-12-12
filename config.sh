@@ -104,10 +104,17 @@ $OPTIM_CONFIG_OPT \
 
 # No C++11 library present in default OSX 10.4/10.5, so we need to bundle the one
 # that's part of the toolkit, and adjust the paths with install_name_tool.
-cp -p /opt/macports-tff/lib/libgcc/libstdc++.6.dylib /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib ScummVM.app/Contents/MacOS/
+#
+# Note: we can't use @rpath, as it's not available in OSX 10.4, see:
+# https://www.mikeash.com/pyblog/friday-qa-2009-11-06-linking-and-install-names.html
+mkdir -p ScummVM.app/Contents/Frameworks
+cp -p /opt/macports-tff/lib/libgcc/libstdc++.6.dylib /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib ScummVM.app/Contents/Frameworks/
 for file in ScummVM.app/Contents/MacOS/scummvm ScummVM.app/Contents/Resources/*.plugin ; do
-	/opt/macports-tff/bin/install_name_tool -change /opt/macports-tff/lib/libgcc/libstdc++.6.dylib "@executable_path/libstdc++.6.dylib" "$file"
-	/opt/macports-tff/bin/install_name_tool -change /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib  "@executable_path/libgcc_s.1.dylib" "$file"
+	/opt/macports-tff/bin/install_name_tool -change /opt/macports-tff/lib/libgcc/libstdc++.6.dylib "@executable_path/../Frameworks/libstdc++.6.dylib" "$file"
+	/opt/macports-tff/bin/install_name_tool -change /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" "$file"
+	# XXX: system /usr/lib/libgcc_s.1.dylib appears before ours in otool output, which may cause issues.
+	# The following line could fix that, but since I'm not aware of any real problem so far, it's unused for now.
+	#/opt/macports-tff/bin/install_name_tool -change /usr/lib/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" "$file"
 done
 
 # Don't rebuild the bundle, since we're modifying it just below
