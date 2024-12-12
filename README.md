@@ -180,6 +180,18 @@ The `/usr/bin/make` that's part of OSX 10.4 is way too old (the one on OSX 10.5 
 
 Use the `/opt/macports-tff/bin/gmake` binary provided by the toolkit, instead.
 
+### I have an `ld: library not found for -lcrt1.10.5.o` error at the very end of the build
+
+Maybe you tried running `make` without calling the recommended scripts?
+
+Do use or scripts or, at the very least, launch the following command:
+
+```sh
+eval "$(grep ^'export ' /path/to/this/scummvm-build-macppc/config.sh)"
+```
+
+in order to have the proper environment variables exported.
+
 ### I'm getting an `hdiutil` error when building the `ScummVM-snapshot.dmg` file
 
 It looks like `hdiutil` may randomly fail when run from OSX 10.4. Just run the same command again and it should work. Yes, strange.
