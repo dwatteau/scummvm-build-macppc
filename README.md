@@ -7,11 +7,11 @@ This repository hosts the scripts used to build current releases of ScummVM for 
 - An OSX 10.4 or 10.5 PPC system. (Cross-compiling from i386 10.4/10.5 is untested and unsupported. Same thing applies to Sorbet Leopard.)
     - **IMPORTANT:** If you want to have a build that's going to work on both OSX 10.4 and 10.5, you need to build from a 10.4 box. That's because the libstdc++ C++11 library that's part of the toolkit is only built for the current system. So, even though the dependencies and ScummVM itself will properly target OSX 10.4, you won't be able to run it on OSX 10.4 if you use the C++11 toolkit made for 10.5.
     - If you're just doing a build for yourself on your own OSX 10.5 machine, you don't care, and you *can* build from OSX 10.5. Just don't redistribute it to 10.4 users.
-- Reasonnable knowledge of the Terminal and the Unix shell
+- Reasonnable knowledge of the Terminal and the Unix shell (you can install iTerm 0.10 if you're looking for a terminal with tabs on Tiger)
 - Xcode 2.4.1/2.5 for Tiger or 3.0/3.1 for Leopard (available from the [Apple Developer website](https://developer.apple.com/downloads/))
 - Downloading and installing the *Unofficial TenFourFox Development Toolkit*
     - (A quick online search should tell you how to get and install it)
-    - WARNING: I use the toolkit dated from 2021 (`Unofficial_TenFourFox_Developer_Toolkit_-_Tiger_2.dmg`), not the newer ones. There's no particular reason for me not to upgrade it, except that it works. If you install a newer toolkit, you may run into some issues.
+    - WARNING: I use the toolkit dated from 2021 (`Unofficial_TenFourFox_Developer_Toolkit_-_Tiger_2.dmg`), not the newer ones. There's no particular reason for me not to upgrade it, except that it works. If you install a newer toolkit, note that it's untested.
 - Installing [the required dependencies](#installing-the-required-dependencies)
 - Fetching the [ScummVM source code](#fetching-the-scummvm-source-code)
 - Doing your [own build of ScummVM](#doing-your-own-scummvm-build)
