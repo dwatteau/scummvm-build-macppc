@@ -49,7 +49,7 @@ OPTIM_CONFIG_OPT=--enable-optimizations
 if [ "$WITH_OPTIM" = "yes" ]; then
 	# XXX: -Os used to be recommended for G3s, but that was in the GCC 3.x
 	# years. Unless there is a need for it, and real measurements, I'd rather
-	# keep the most tested and most reliable default flag: -O2
+	# keep the most tested and most reliable optimization flag: -O2
 	OPTIM_CXXFLAGS='-O2'
 	OPTIM_CONFIG_OPT=--enable-optimizations
 fi
@@ -117,5 +117,5 @@ for file in ScummVM.app/Contents/MacOS/scummvm ScummVM.app/Contents/Resources/*.
 	#/opt/macports-tff/bin/install_name_tool -change /usr/lib/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" "$file"
 done
 
-# Don't rebuild the bundle, since we're modifying it just below
+# Don't rebuild the bundle, since we've been modifying it above
 /opt/macports-tff/bin/gmake -o bundle USE_CURL= osxsnap
