@@ -1,3 +1,6 @@
+Merged into SDL 1.2 upstream Git HEAD:
+https://github.com/libsdl-org/SDL-1.2/commit/61074e0960a7ee540af4a4446a94a66cc77c4c32
+
 https://bugs.scummvm.org/ticket/14262
 
 SDL 1.2.15 did some "OS X 10.6 SDK deprecation cleanup" and added a restriction
