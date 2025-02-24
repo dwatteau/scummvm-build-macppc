@@ -97,7 +97,7 @@ $OPTIM_CONFIG_OPT \
 --enable-taskbar
 
 # USE_CURL= because we don't trust this on old macOS
-/opt/macports-tff/bin/gmake USE_CURL=
+/opt/macports-tff/bin/gmake -j"$(sysctl hw.logicalcpu | awk '{print $NF}')" USE_CURL=
 #exit 0
 
 /opt/macports-tff/bin/gmake USE_CURL= bundle
