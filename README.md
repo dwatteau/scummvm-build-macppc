@@ -28,25 +28,34 @@ Download the older 3.7.12 release here: <https://github.com/ccache/ccache/releas
 tar xzf ccache-3.7.12.tar.gz
 cd ccache-3.7.12
 CC=/usr/bin/gcc-4.0 ./configure --with-bundled-zlib
-make && sudo make install
+make V=1 && sudo make install
 ```
 
 ### Installing the required dependencies
 
 You need to copy and work from *this* repository.
 
+If you know about Git, use Git. It's part of the Unofficial TenFourFox Development Toolkit above.
+
+**Security warning:** Of course, remember that you're doing requests to the Internet with an OS that's hasn't received any security update for more than a decade!
+
+```sh
+mkdir -p ~/git
+cd ~/git
+/opt/macports-tff/bin/git clone https://github.com/dwatteau/scummvm-build-macppc.git
+```
+
 Check that you meet the requirements (*TODO:* very lightweight tests at the moment):
 ```sh
-cd /path/to/this/scummvm-build-macppc
-cd toolchains/macosx-ppc
+cd scummvm-build-macppc/toolchains/macosx-ppc
 ./prepare.sh
 ```
 
 The required libraries are going to be built as *static* libraries, put in `/staticscummvm`.
 
-If you want to use a pre-built set of libraries, you may look at [the Releases page](https://github.com/dwatteau/scummvm-build-macppc/releases) for a `.zip` archive that should be extracted into `/staticscummvm`.
+If you want to use a pre-built set of libraries, you may look at [the Releases page](https://github.com/dwatteau/scummvm-build-macppc/releases) for an archive that should be extracted into `/staticscummvm`.
 
-Otherwise, if you want to build things yourself: 
+Otherwise, if you want to build things yourself:
 
 ```sh
 for lib in $(grep -vE '^\s*$|^#' packages/order.txt) ; do
@@ -55,7 +64,7 @@ for lib in $(grep -vE '^\s*$|^#' packages/order.txt) ; do
   if [ $? -ne 0 ]; then
     echo "ERROR: Building library $lib failed!"
     break
-  fi 
+  fi
   cd ../..
 done
 ```
@@ -66,24 +75,19 @@ If you see any "`ERROR`" printed as the last line in the script, something went 
 
 ### Fetching the ScummVM source code
 
-If you know about Git, use Git. It's available in `/opt/macports-tff/bin/git` (albeit an older release) once the Unofficial TenFourFox Development Toolkit is properly installed.
-
-Of course, remember that you're doing requests to the Internet with an OS that's hasn't received any security update for more than a decade!
-
 ```sh
-mkdir -p ~/git
 cd ~/git
-git clone https://github.com/scummvm/scummvm.git
+/opt/macports-tff/bin/git clone https://github.com/scummvm/scummvm.git
 ```
 
 It's going to take a while.
 
 If you don't know Git, and just want to build a particular fixed ScummVM release yourself, you may fetch a *tarball* with the source code, for example:  
-<https://downloads.scummvm.org/frs/scummvm/2.8.1/scummvm-2.8.1.tar.bz2>
+<https://downloads.scummvm.org/frs/scummvm/2.9.9/scummvm-2.9.9.tar.bz2>
 
 and just extract it this way:
 ```sh
-tar xjf /path/to/scummvm-2.8.1.tar.bz2
+tar xjf /path/to/scummvm-2.9.0.tar.bz2
 ```
 
 ### Doing your own ScummVM build
@@ -91,13 +95,13 @@ tar xjf /path/to/scummvm-2.8.1.tar.bz2
 The idea is to go the directory with the ScummVM source code, and call the `config.sh` that's at the root of this OSXPPC build repository:
 
 ```sh
-cd /path/to/scummvm/source
-bash /path/to/this/scummvm-build-macppc/config.sh
+cd ~/git/scummvm
+bash ~/git/scummvm-build-macppc/config.sh
 ```
 
 This will do a full build of ScummVM with all its stable engines, and compiler optimizations turned on. If built from OSX 10.4, compatibility with OSX 10.4/10.5 and G3 to G5 systems should work out of the box.
 
-Build time for a full optimized build can take several hours, depending on the machine you have. You can change the `gmake` call to `gmake -j2` if you have a Dual G5, `gmake -j4` if you have a Quad G5, etc.
+Build time for a full optimized build can take several hours, depending on the machine you have.
 
 The build script should produce a `ScummVM-snapshot.dmg` image as a final output.
 
