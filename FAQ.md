@@ -45,16 +45,23 @@ Using your own GDB binary requires special permissions, documented here for exam
 
 It looks like trying to make this work on OSX 10.5 is pointless. So OSX 10.4 may be a hard requirement!
 
-Ensure there's a `-p` option set up in the file below:
+Ensure there's a `-p` option set up in the file below (Leopard only):
 ```sh
 cat /System/Library/LaunchDaemons/com.apple.taskgated.plist
 ```
 
-And then allow your current user to run this GDB binary with particular privileges:
+i.e. something like this:
+```xml
+<array>
+	<string>/usr/libexec/taskgated</string>
+	<string>-p</string>
+```
+
+Allow your current user to run this GDB binary with particular privileges (Leopard only):
 
 ```sh
 sudo dseditgroup -o edit -a YOURUSERNAMEHERE -t user procmod
-sudo chgrp procmod /path/to/extracted/archive/above/gdb # parent directory may also need 'chmod g+s'?
+sudo chgrp procmod /path/to/extracted/gdb/archive/above/gdb7 # parent directory may also need 'chmod g+s'?
 ```
 
 and then reboot for the changes to take effect.
@@ -62,7 +69,7 @@ and then reboot for the changes to take effect.
 Then, after doing an `--disable-optimizations --enable-debug` build (warning: if you don't use `--enable-plugins --default-dynamic`, building too many engines will trigger internal linker errors. So, if you need to particular a particular engine, do your ScummVM debug build with `--disable-detection-full --disable-all-engines --enable-engine=your-engine-name`):
 
 ```sh
-/path/to/extracted/archive/above/gdb -q ./path/to/debug/scummvm
+/path/to/gdb7 -q ./path/to/scummvm
 (gdb) run
 
 (gdb) bt
