@@ -2,6 +2,8 @@
 
 This repository hosts the scripts used to build current releases of ScummVM for OSX PPC (10.4, 10.5), and its required libraries.
 
+If you're just interested in _using_ ScummVM on OSX PPC, look for the "Mac OS X 10.4+ PPC 32 bits" disk images on the [ScummVM download page](https://www.scummvm.org/downloads/). Development versions are sometimes published [here in the forums](https://forums.scummvm.org/viewtopic.php?p=100462) (they often contain _all_ ScummVM game engines, including the unstable ones).
+
 ## Requirements
 
 - An OSX 10.4 or 10.5 PPC system. (Cross-compiling from i386 10.4/10.5 is untested and unsupported. Same thing applies to Sorbet Leopard.)
