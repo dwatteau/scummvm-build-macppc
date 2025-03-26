@@ -1,6 +1,6 @@
 #! /bin/sh
 
-FLAC_VERSION=1.3.4 # XXX: maybe time to update to 1.4?
+FLAC_VERSION=1.3.4 # XXX: update to 1.4/1.5 for the next major ScummVM release?
 #FLAC_SHA256=213e82bd716c9de6db2f98bcadbc4c24c7e2efe8c75939a1a84e28539c4e1748
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-FREETYPE_VERSION=2.12.1
+FREETYPE_VERSION=2.12.1 # TODO: move to 2.13.x for the next major ScummVM release?
 FREETYPE_SHA256=XXX
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

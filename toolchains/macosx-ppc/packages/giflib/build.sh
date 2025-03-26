@@ -1,6 +1,6 @@
 #! /bin/sh
 
-GIFLIB_VERSION=5.2.1
+GIFLIB_VERSION=5.2.2
 #GIFLIB_SHA256=34a7377ba834397db019e8eb122e551a49c98f49df75ec3fcc92b9a794a4f6d1
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

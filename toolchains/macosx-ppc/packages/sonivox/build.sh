@@ -1,6 +1,6 @@
 #! /bin/sh
 
-SONIVOX_VERSION=3.6.14
+SONIVOX_VERSION=3.6.15
 #SONIVOX_SHA256=d625ad6b3375a036bf30cd3b0b40e8dde08f0891bfd3a2960650654bdb50318c
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
