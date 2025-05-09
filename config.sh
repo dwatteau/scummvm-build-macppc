@@ -10,10 +10,11 @@ set -eu
 # to have precise control of what's being used outside of the base system
 export PATH=/staticscummvm/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
-# If you want the 'git' command to be available to the build scripts (e.g.
-# for proper display of the current Git revision for development builds),
-# do this:
-#sudo ln -sf /opt/macports-tff/bin/git /usr/bin/git
+# Still, make the 'git' command availabel to the build scripts (e.g. for
+# proper display of the current Git revision, in development builds)
+if [ ! -e /usr/bin/git ]; then
+	sudo ln -sf /opt/macports-tff/bin/git /usr/bin/git
+fi
 
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
