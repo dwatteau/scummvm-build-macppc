@@ -9,11 +9,11 @@ If you're just interested in _using_ ScummVM on OSX PPC, look for the "Mac OS X 
 - An OSX 10.4 or 10.5 PPC system. (Cross-compiling from i386 10.4/10.5 is untested and unsupported. Same thing applies to Sorbet Leopard.)
     - **IMPORTANT:** If you want to have a build that's going to work on both OSX 10.4 and 10.5, you need to build from a 10.4 box. That's because the libstdc++ C++11 library that's part of the toolkit is only built for the current system. So, even though the dependencies and ScummVM itself will properly target OSX 10.4, you won't be able to run it on OSX 10.4 if you use the C++11 toolkit made for 10.5.
     - If you're just doing a build for yourself on your own OSX 10.5 machine, you don't care, and you *can* build from OSX 10.5. Just don't redistribute it to 10.4 users.
-- Reasonnable knowledge of the Terminal and the Unix shell (you can install iTerm 0.10 if you're looking for a terminal with tabs on Tiger)
+- Reasonnable knowledge of the Terminal and the Unix shell (you can install [iTerm 0.10](https://downloads.sourceforge.net/iterm/iTerm_0.10.zip) if you're looking for a terminal with tabs on Tiger — some [older versions of iTerm 2](https://github.com/macos-powerpc/powerpc-ports/commit/37f620eef6ed95face132b1ce43fbaca601f620e) may also run but require more work)
 - Xcode 2.4.1/2.5 for Tiger or 3.0/3.1 for Leopard (available from the [Apple Developer website](https://developer.apple.com/downloads/))
 - Downloading and installing the *Unofficial TenFourFox Development Toolkit*
     - (A quick online search should tell you how to get and install it)
-    - WARNING: I use the toolkit dated from 2021 (`Unofficial_TenFourFox_Developer_Toolkit_-_Tiger_2.dmg`), not the newer ones. There's no particular reason for me not to upgrade it, except that it works. If you install a newer toolkit, note that it's untested.
+    - WARNING: I use the toolkit dated from 2021 (`Unofficial_TenFourFox_Developer_Toolkit_-_Tiger_2.dmg`), not the newer ones. There's no particular reason for me not to upgrade it, except that it works. If you install a newer toolkit, note that it's untested (it looks like some later builds may lack `/opt/macports-tff/bin/cmake` which is needed to build some libraries, for instance).
 - Installing [the required dependencies](#installing-the-required-dependencies)
 - Fetching the [ScummVM source code](#fetching-the-scummvm-source-code)
 - Doing your [own build of ScummVM](#doing-your-own-scummvm-build)
@@ -85,11 +85,11 @@ cd ~/git
 It's going to take a while.
 
 If you don't know Git, and just want to build a particular fixed ScummVM release yourself, you may fetch a *tarball* with the source code, for example:  
-<https://downloads.scummvm.org/frs/scummvm/2.9.9/scummvm-2.9.9.tar.bz2>
+<https://downloads.scummvm.org/frs/scummvm/2.9.1/scummvm-2.9.1.tar.bz2>
 
 and just extract it this way:
 ```sh
-tar xjf /path/to/scummvm-2.9.0.tar.bz2
+tar xjf /path/to/scummvm-2.9.1.tar.bz2
 ```
 
 ### Doing your own ScummVM build
@@ -98,7 +98,7 @@ The idea is to go the directory with the ScummVM source code, and call the `conf
 
 ```sh
 cd ~/git/scummvm
-bash ~/git/scummvm-build-macppc/config.sh
+../scummvm-build-macppc/config.sh
 ```
 
 This will do a full build of ScummVM with all its stable engines, and compiler optimizations turned on. If built from OSX 10.4, compatibility with OSX 10.4/10.5 and G3 to G5 systems should work out of the box.
