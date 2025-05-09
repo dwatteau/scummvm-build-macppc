@@ -16,3 +16,6 @@
 /workers/*/Dockerfile.debug
 
 __pycache__/
+# macOS stuff:
+._*
+.DS_Store
