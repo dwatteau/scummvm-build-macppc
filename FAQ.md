@@ -26,7 +26,9 @@ Since ScummVM mostly (but not only!) targets "old games", I haven't seen any rea
 
 The performance improvements between late PPC systems and OSX 10.4/10.5/10.6 Intel means that most of the games appear to work fine, even when using Rosetta 1 to translate the PowerPC code to x86 code. So, I don't see the point in doing an i386 build for i386 Tiger/Leopard/Snow Leopard either.
 
-Also, it appears (from some MacRumors forum discussions) that the GCC 7.5 compiler that's used to build ScummVM may have various unfixed bugs when targeting ppc64 (which is necessary for a G5-optimized build). So if someone wants a G5 build, it may need necessary to either downgrade to the GCC 4.8 compiler included the toolkit (which was used to build OSXPPC releases for ScummVM 2.6 to 2.8), or upgrade to a newer compiler, such as GCC ≥ 10. For now (2024), a unique, stable and (mostly) reproducible build is preferred.
+Regarding ppc64, I don't see the point; even TenFourFox kept its G5-optimized build 32-bit. Tiger's support for ppc64 is extremely minimal, and I'm not sure we'd see much benefit for the vast majority of supported games. Also, it appears (from some MacRumors forum discussions) that the GCC 7.5 compiler that's used to build ScummVM may have some issues when targeting ppc64. So, once: doesn't look like it's worth the trouble.
+
+For now (2025), a unique, stable and (mostly) reproducible build is preferred.
 
 ## When aren't you using MacPorts for the toolchain/dependencies?
 
