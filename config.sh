@@ -108,15 +108,36 @@ $OPTIM_CONFIG_OPT \
 #
 # Note: we can't use @rpath, as it's not available in OSX 10.4, see:
 # https://www.mikeash.com/pyblog/friday-qa-2009-11-06-linking-and-install-names.html
+
 mkdir -p ScummVM.app/Contents/Frameworks
-cp -p /opt/macports-tff/lib/libgcc/libstdc++.6.dylib /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib ScummVM.app/Contents/Frameworks/
+
+for dylib in libgcc_s.1.dylib libstdc++.6.dylib ; do
+	cp -p "/opt/macports-tff/lib/libgcc/$dylib" ScummVM.app/Contents/Frameworks/
+	# Fix self-references in embedded dylibs
+	/opt/macports-tff/bin/install_name_tool \
+		-id "@executable_path/../Frameworks/$dylib" \
+		"ScummVM.app/Contents/Frameworks/$dylib"
+done
+
+# Fix cross-references in embedded dylibs
+/opt/macports-tff/bin/install_name_tool \
+	-change /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" \
+	ScummVM.app/Contents/Frameworks/libstdc++.6.dylib
+
+# Fix references in ScummVM binaries and plugins
 for file in ScummVM.app/Contents/MacOS/scummvm ScummVM.app/Contents/Resources/*.plugin ; do
-	/opt/macports-tff/bin/install_name_tool -change /opt/macports-tff/lib/libgcc/libstdc++.6.dylib "@executable_path/../Frameworks/libstdc++.6.dylib" "$file"
-	/opt/macports-tff/bin/install_name_tool -change /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" "$file"
-	# XXX: system /usr/lib/libgcc_s.1.dylib appears before ours in otool output, which may cause issues.
-	# The following line could fix that, but since I'm not aware of any real problem so far, it's unused for now.
+	/opt/macports-tff/bin/install_name_tool \
+		-change /opt/macports-tff/lib/libgcc/libstdc++.6.dylib "@executable_path/../Frameworks/libstdc++.6.dylib" \
+		-change /opt/macports-tff/lib/libgcc/libgcc_s.1.dylib  "@executable_path/../Frameworks/libgcc_s.1.dylib" \
+		"$file"
+
+	# XXX: system /usr/lib/libgcc_s.1.dylib appears before ours in `otool` output, which
+	# may cause issues. The following line could fix that, but since I'm not aware of
+	# any real problem so far, it's unused for now (plus, the old TenFourFox binaries
+	# have the same behavior)
 	#/opt/macports-tff/bin/install_name_tool -change /usr/lib/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" "$file"
 done
 
-# Don't rebuild the bundle, since we've been modifying it above
+# Don't rebuild the bundle -- it's already done and we've just changed some
+# things in it
 /opt/macports-tff/bin/gmake -o bundle USE_CURL= osxsnap
