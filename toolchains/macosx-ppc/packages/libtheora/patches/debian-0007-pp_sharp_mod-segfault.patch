@@ -1,0 +1,33 @@
+commit 0ae66d565e6bead8604d312bc1a4e9dccf245c88
+Author: Tim Terriberry <tterribe@xiph.org>
+Date:   Tue May 8 02:51:57 2012 +0000
+
+    Fix pp_sharp_mod calculation.
+
+    This was broken when the dequant_tables indexing changed in commit
+     r16102, but it only affected post-processing quality, so we never
+     noticed.
+    With gcc 4.8.0, this can now trigger a segfault during decoder
+     initialization.
+
+    svn path=/trunk/theora/; revision=18268
+
+Index: libtheora-salsa/lib/decode.c
+===================================================================
+--- libtheora-salsa.orig/lib/decode.c	2025-03-16 05:39:47.754277765 +0100
++++ libtheora-salsa/lib/decode.c	2025-03-16 05:39:51.000000000 +0100
+@@ -397,10 +397,10 @@
+     int qsum;
+     qsum=0;
+     for(qti=0;qti<2;qti++)for(pli=0;pli<3;pli++){
+-      qsum+=_dec->state.dequant_tables[qti][pli][qi][12]+
+-       _dec->state.dequant_tables[qti][pli][qi][17]+
+-       _dec->state.dequant_tables[qti][pli][qi][18]+
+-       _dec->state.dequant_tables[qti][pli][qi][24]<<(pli==0);
++      qsum+=_dec->state.dequant_tables[qi][pli][qti][12]+
++       _dec->state.dequant_tables[qi][pli][qti][17]+
++       _dec->state.dequant_tables[qi][pli][qti][18]+
++       _dec->state.dequant_tables[qi][pli][qti][24]<<(pli==0);
+     }
+     _dec->pp_sharp_mod[qi]=-(qsum>>11);
+   }

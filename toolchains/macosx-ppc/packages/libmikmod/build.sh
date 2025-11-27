@@ -2,7 +2,7 @@
 
 # TODO: look at openmpt for the next major ScummVM release?
 # it has SO3 support (for sludge) engine.
-LIBMIKMOD_VERSION=3.3.11.1
+LIBMIKMOD_VERSION=3.3.13
 #LIBMIKMOD_SHA256=XXX
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)

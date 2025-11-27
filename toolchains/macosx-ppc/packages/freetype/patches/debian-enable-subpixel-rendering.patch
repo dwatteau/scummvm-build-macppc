@@ -1,7 +1,9 @@
-Description: Enable subpixel rendering to provide LCD colour filtering.
-Author: Steve Langasek <vorlon@debian.org>
+Description: Debian-specific FreeType configuration options
+  * Enable subpixel rendering to provide LCD colour filtering.
+  * Enable long family names for PCF fonts.
+Author: Hugh McMaster <hmc@debian.org>
 Forwarded: not-needed
-Last-Update: 2021-10-07
+Last-Update: 2023-07-09
 
 --- a/include/freetype/config/ftoption.h
 +++ b/include/freetype/config/ftoption.h
@@ -14,3 +16,12 @@ Last-Update: 2021-10-07
  
  
    /**************************************************************************
+@@ -903,7 +903,7 @@
+    * If this option is activated, it can be controlled with the
+    * `no-long-family-names` property of the 'pcf' driver module.
+    */
+-/* #define PCF_CONFIG_OPTION_LONG_FAMILY_NAMES */
++#define PCF_CONFIG_OPTION_LONG_FAMILY_NAMES
+ 
+ 
+   /*************************************************************************/

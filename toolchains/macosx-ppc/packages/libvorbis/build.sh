@@ -21,10 +21,10 @@ CC=/opt/macports-tff/bin/gcc-mp-7 \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure \
---disable-docs --disable-examples --with-ogg=${PREFIX}
+--disable-docs --disable-examples --enable-static --with-ogg=${PREFIX}
 
-# Avoid compiling and installing useless stuff
-sed -i'.orig' -e 's/^\(SUBDIRS.*\) test doc/\1/' Makefile
+# Avoid compiling and installing doc
+sed -i'.orig' -e 's/^\(SUBDIRS.*\) doc/\1/' Makefile
 
 do_make V=1
 do_make install

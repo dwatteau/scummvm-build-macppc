@@ -1,0 +1,123 @@
+Description: Replaced possible bit shifting into signed bit of stride values.
+ Use multiplication instead, allowing the compiler to optimize to
+ bitshifts if it believe it to be safe.
+
+ Based on upstream commits a6766c94721bc55e8e56fb0d941ecfe2d27c3d17
+ and ec642ecf6d94f11d5eb05ab1fb7a9728c9a89cae, adjusted for 1.1.1.
+Author: Petter Reinholdtsen <pere@debian.org>
+Forwarded: not-needed
+Last-Update: 2025-06-03
+---
+diff --git a/lib/decode.c b/lib/decode.c
+index 7be6646..ad56716 100644
+--- a/lib/decode.c
++++ b/lib/decode.c
+@@ -1747,13 +1747,13 @@ static void oc_dec_deblock_frag_rows(oc_dec_ctx *_dec,
+       flimit=(qstep*3)>>2;
+       oc_filter_hedge(dst+x,dst_ystride,src+x-src_ystride,src_ystride,
+        qstep,flimit,variance,variance+nhfrags);
+-      oc_filter_vedge(dst+x-(dst_ystride<<2)-4,dst_ystride,
++      oc_filter_vedge(dst+x-(dst_ystride*4)-4,dst_ystride,
+        qstep,flimit,variance-1);
+       variance++;
+       dc_qi++;
+     }
+-    dst+=dst_ystride<<3;
+-    src+=src_ystride<<3;
++    dst+=dst_ystride*8;
++    src+=src_ystride*8;
+   }
+   /*And finally, handle the last row in the frame, if it's in the range.*/
+   if(!notdone){
+@@ -1769,7 +1769,7 @@ static void oc_dec_deblock_frag_rows(oc_dec_ctx *_dec,
+     for(x=8;x<width;x+=8){
+       qstep=_dec->pp_dc_scale[*dc_qi++];
+       flimit=(qstep*3)>>2;
+-      oc_filter_vedge(dst+x-(dst_ystride<<3)-4,dst_ystride,
++      oc_filter_vedge(dst+x-(dst_ystride*8)-4,dst_ystride,
+        qstep,flimit,variance++);
+     }
+   }
+@@ -1944,7 +1944,7 @@ static void oc_dec_dering_frag_rows(oc_dec_ctx *_dec,th_img_plane *_img,
+       frag++;
+       variance++;
+     }
+-    idata+=ystride<<3;
++    idata+=ystride*8;
+   }
+ }
+ 
+@@ -2877,10 +2877,10 @@ int th_decode_ycbcr_out(th_dec_ctx *_dec,th_ycbcr_buffer _ycbcr){
+             u_row[x>>1]=OC_CLAMP255(u);
+             v_row[x>>1]=OC_CLAMP255(v);
+           }
+-          y_row+=_ycbcr[0].stride<<1;
++          y_row+=_ycbcr[0].stride*2;
+           u_row+=_ycbcr[1].stride;
+           v_row+=_ycbcr[2].stride;
+-          rgb_row+=cstride<<1;
++          rgb_row+=cstride*2;
+         }
+       }break;
+       case TH_PF_422:{
+diff --git a/lib/state.c b/lib/state.c
+index 42ed33a..fe803d6 100644
+--- a/lib/state.c
++++ b/lib/state.c
+@@ -573,7 +573,7 @@ static int oc_state_ref_bufs_init(oc_theora_state *_state,int _nrefs){
+         frag_buf_offs[fragi]=hpix-ref_frame_data;
+         hpix+=8;
+       }
+-      vpix+=stride<<3;
++      vpix+=stride*8;
+     }
+   }
+   /*Initialize the reference frame indices.*/
+@@ -1055,7 +1055,7 @@ void oc_state_loop_filter_frag_rows_c(const oc_theora_state *_state,int *_bv,
+           loop_filter_h(ref+8,ystride,_bv);
+         }
+         if(fragi+nhfrags<fragi_bot&&!frags[fragi+nhfrags].coded){
+-          loop_filter_v(ref+(ystride<<3),ystride,_bv);
++          loop_filter_v(ref+(ystride*8),ystride,_bv);
+         }
+       }
+       fragi++;
+diff --git a/lib/x86/mmxfrag.c b/lib/x86/mmxfrag.c
+index 2c73293..6930aaf 100644
+--- a/lib/x86/mmxfrag.c
++++ b/lib/x86/mmxfrag.c
+@@ -141,7 +141,7 @@ void oc_frag_recon_intra_mmx(unsigned char *_dst,int _ystride,
+     :
+     :[residue]"r"(_residue),
+      [dst]"r"(_dst),
+-     [dst4]"r"(_dst+(_ystride<<2)),
++     [dst4]"r"(_dst+(_ystride*4)),
+      [ystride]"r"((ptrdiff_t)_ystride),
+      [ystride3]"r"((ptrdiff_t)_ystride*3)
+     :"memory"
+diff --git a/lib/x86/mmxstate.c b/lib/x86/mmxstate.c
+index 808b0a7..dd428d6 100644
+--- a/lib/x86/mmxstate.c
++++ b/lib/x86/mmxstate.c
+@@ -176,7 +176,7 @@ void oc_state_loop_filter_frag_rows_mmx(const oc_theora_state *_state,
+           OC_LOOP_FILTER_H_MMX(ref+8,ystride,ll);
+         }
+         if(fragi+nhfrags<fragi_bot&&!frags[fragi+nhfrags].coded){
+-          OC_LOOP_FILTER_V_MMX(ref+(ystride<<3),ystride,ll);
++          OC_LOOP_FILTER_V_MMX(ref+(ystride*8),ystride,ll);
+         }
+       }
+       fragi++;
+diff --git a/lib/x86_vc/mmxstate.c b/lib/x86_vc/mmxstate.c
+index 73bd198..8a00909 100644
+--- a/lib/x86_vc/mmxstate.c
++++ b/lib/x86_vc/mmxstate.c
+@@ -193,7 +193,7 @@ void oc_state_loop_filter_frag_rows_mmx(const oc_theora_state *_state,
+           OC_LOOP_FILTER_H_MMX(ref+8,ystride,ll);
+         }
+         if(fragi+nhfrags<fragi_bot&&!frags[fragi+nhfrags].coded){
+-          OC_LOOP_FILTER_V_MMX(ref+(ystride<<3),ystride,ll);
++          OC_LOOP_FILTER_V_MMX(ref+(ystride*8),ystride,ll);
+         }
+ #undef PIX
+ #undef YSTRIDE3

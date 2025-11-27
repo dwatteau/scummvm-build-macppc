@@ -1,8 +1,8 @@
 #! /bin/sh
 
-LIBVPX_VERSION=1.15.0
-#LIBVPX_VERSION=1.14.1
-#LIBVPX_SHA256=30f93e9c63ee627d1a2cedcf59ac34d45bf30240982f99e44c6e015466b4e73d
+# XXX: after 1.15.2, a C++17 requirement was added
+
+LIBVPX_VERSION=1.15.2
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 HELPERS_DIR=$PACKAGE_DIR/../../../common

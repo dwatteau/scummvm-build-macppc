@@ -9,7 +9,7 @@ HELPERS_DIR=$PACKAGE_DIR/../../../common
 
 do_make_bdir
 
-do_http_fetch libmpeg2 "http://libmpeg2.sourceforge.net/files/libmpeg2-${LIBMPEG2_VERSION}.tar.gz" \
+do_http_fetch libmpeg2 "https://web.archive.org/web/https://libmpeg2.sourceforge.io/files/libmpeg2-${LIBMPEG2_VERSION}.tar.gz" \
 	'tar xzf' #"sha256:${LIBMPEG2_SHA256}"
 
 export MACOSX_DEPLOYMENT_TARGET=10.4

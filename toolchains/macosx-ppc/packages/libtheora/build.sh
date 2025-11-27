@@ -1,5 +1,10 @@
 #! /bin/sh
 
+# XXX: there's now a new release, but considering that it was quite unreliable
+# at the start, with older OSX having its own quirks, I'd rather wait for
+# the 1.2.x branch to stabilize a bit more, before upgrading it.
+#
+# TODO: when doing that upgrade, test this lib on OSXPPC more.
 LIBTHEORA_VERSION=1.1.1
 LIBTHEORA_SHA256=b6ae1ee2fa3d42ac489287d3ec34c5885730b1296f0801ae577a35193d3affbc
 

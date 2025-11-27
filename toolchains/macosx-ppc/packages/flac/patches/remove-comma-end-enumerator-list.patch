@@ -2,7 +2,7 @@ fix "comma at end of enumerator list" error with older compilers defaulting to C
 
 --- a/include/FLAC/format.h
 +++ b/include/FLAC/format.h
-@@ -512,7 +512,7 @@
+@@ -519,7 +519,7 @@
  	FLAC__METADATA_TYPE_UNDEFINED = 7,
  	/**< marker to denote beginning of undefined type range; this number will increase as new metadata types are added */
  

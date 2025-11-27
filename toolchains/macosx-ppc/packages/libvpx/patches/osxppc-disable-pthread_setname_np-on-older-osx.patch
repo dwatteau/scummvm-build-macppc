@@ -1,5 +1,7 @@
 pthread_setname_np() doesn't exist before OSX 10.6
 
+note: macports-legacy-support has a wrapper for it, but it just returns 0 anyway
+
 --- a/vpx_util/vpx_thread.c
 +++ b/vpx_util/vpx_thread.c
 @@ -27,6 +27,10 @@

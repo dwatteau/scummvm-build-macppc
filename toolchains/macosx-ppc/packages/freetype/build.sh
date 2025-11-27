@@ -1,6 +1,6 @@
 #! /bin/sh
 
-FREETYPE_VERSION=2.12.1 # TODO: move to 2.13.x for the next major ScummVM release?
+FREETYPE_VERSION=2.13.3
 FREETYPE_SHA256=XXX
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -23,7 +23,7 @@ ZLIB_LIBS="-Wl,-macosx_version_min,10.4 -Wl,-search_paths_first -L$PREFIX/lib -l
 ac_cv_prog_cc_c11=no \
 do_configure \
 --enable-freetype-config --with-zlib=yes --with-bzip2=yes \
---with-png=no --with-harfbuzz=no --with-brotli=no \
+--with-png=no --with-harfbuzz=no --with-brotli=no --with-librsvg=no \
 --with-old-mac-fonts
 
 do_make

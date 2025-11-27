@@ -28,6 +28,6 @@ file rename syntax of the original patch
 +#define FLUIDLITE_STATIC
 +#endif
 +
- #if defined(_WIN32)
  #if defined(FLUIDLITE_STATIC)
  #define FLUIDSYNTH_API
+ 

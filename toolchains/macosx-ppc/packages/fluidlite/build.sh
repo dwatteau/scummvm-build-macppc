@@ -1,6 +1,6 @@
 #! /bin/sh
 
-FLUIDLITE_VERSION=b0f187b404e393ee0a495b277154d55d7d03cbeb
+FLUIDLITE_VERSION=4a01cf1c67419e71da971d209f2855bbf4f3bab8
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 HELPERS_DIR=$PACKAGE_DIR/../../../common
@@ -11,7 +11,7 @@ do_make_bdir
 do_http_fetch FluidLite \
 	"https://github.com/divideconcept/FluidLite/archive/${FLUIDLITE_VERSION}.tar.gz" 'tar xzf'
 
-# Not relying on the automated patches/ future here, because the original
+# Not relying on the automated patches/ feature here, because the original
 # patch relies on a Git format that older OSX patch(1) doesn't understand
 cp -p include/fluidlite.h include/fluidlite.h.in
 patch -N -t -p1 < $PACKAGE_DIR/manual-patches/0001-Fix-static-build.patch
