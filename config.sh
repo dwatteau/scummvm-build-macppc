@@ -10,7 +10,7 @@ set -eu
 # to have precise control of what's being used outside of the base system
 export PATH=/staticscummvm/bin:/usr/bin:/bin:/usr/sbin:/sbin
 
-# Still, make the 'git' command availabel to the build scripts (e.g. for
+# Still, make the 'git' command available to the build scripts (e.g. for
 # proper display of the current Git revision, in development builds)
 if [ ! -e /usr/bin/git ]; then
 	sudo ln -sf /opt/macports-tff/bin/git /usr/bin/git
@@ -24,9 +24,11 @@ WITH_DEBUG=${WITH_DEBUG:-yes}
 WITH_OPTIM=${WITH_OPTIM:-yes}
 USE_CCACHE=${USE_CCACHE:-yes}
 
+RELEASE_CONFIG_OPT=
 if [ "$BUILD_MODE" = "release" ]; then
 	WITH_DEBUG=no
 	WITH_OPTIM=yes
+	RELEASE_CONFIG_OPT=--enable-release
 fi
 
 CCACHE_PREFIX=
@@ -48,9 +50,9 @@ fi
 OPTIM_CXXFLAGS='-O0'
 OPTIM_CONFIG_OPT=--enable-optimizations
 if [ "$WITH_OPTIM" = "yes" ]; then
-	# XXX: -Os used to be recommended for G3s, but that was in the GCC 3.x
-	# years. Unless there is a need for it, and real measurements, I'd rather
-	# keep the most tested and most reliable optimization flag: -O2
+	# Note: -Os used to be recommended for G3 CPUs, but that was in the
+	# GCC 3.x years. Unless there is a need for it, and real measurements,
+	# I'd rather keep the most tested/reliable optimization flag: -O2
 	OPTIM_CXXFLAGS='-O2'
 	OPTIM_CONFIG_OPT=--enable-optimizations
 fi
@@ -63,7 +65,10 @@ fi
 # Using updated ar/ld/randlib/strings/strip for their bugfixes and improved
 # support for C++11 content.
 #
-# Fluidlite support currently disabled because of problems on big-endian.
+# XXX: Fluidlite support currently disabled because of problems on big-endian.
+#
+# XXX: maybe use `-mone-byte-bool` at some point? but in all included libs too!
+#      but is it wise for stuff like libstdc++ itself?
 CXX="${CCACHE_PREFIX}/opt/macports-tff/bin/g++-mp-7" \
 AR=/opt/macports-tff/bin/ar \
 LD=/opt/macports-tff/bin/ld-97 \
@@ -76,7 +81,7 @@ LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-headerpad_max_install_names -L/static
 ./configure \
 --with-staticlib-prefix=/staticscummvm \
 --with-xcodetools-path=/Developer/Tools \
---enable-release \
+$RELEASE_CONFIG_OPT \
 $DEBUG_CONFIG_OPT \
 $OPTIM_CONFIG_OPT \
 --enable-static \
@@ -103,11 +108,13 @@ $OPTIM_CONFIG_OPT \
 
 /opt/macports-tff/bin/gmake USE_CURL= bundle
 
+#
 # No C++11 library present in default OSX 10.4/10.5, so we need to bundle the one
 # that's part of the toolkit, and adjust the paths with install_name_tool.
 #
 # Note: we can't use @rpath, as it's not available in OSX 10.4, see:
 # https://www.mikeash.com/pyblog/friday-qa-2009-11-06-linking-and-install-names.html
+#
 
 mkdir -p ScummVM.app/Contents/Frameworks
 
@@ -135,7 +142,9 @@ for file in ScummVM.app/Contents/MacOS/scummvm ScummVM.app/Contents/Resources/*.
 	# may cause issues. The following line could fix that, but since I'm not aware of
 	# any real problem so far, it's unused for now (plus, the old TenFourFox binaries
 	# have the same behavior)
-	#/opt/macports-tff/bin/install_name_tool -change /usr/lib/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" "$file"
+	#/opt/macports-tff/bin/install_name_tool \
+	#	-change /usr/lib/libgcc_s.1.dylib "@executable_path/../Frameworks/libgcc_s.1.dylib" \
+	#	"$file"
 done
 
 # Don't rebuild the bundle -- it's already done and we've just changed some
