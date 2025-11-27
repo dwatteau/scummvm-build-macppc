@@ -30,6 +30,10 @@ CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk 
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure \
 --without-x --disable-shared --enable-rpath=no --enable-altivec=yes
+
+# XXX: with 10.4 being the minimum, dlopen should be preferred?
+grep SDL_LOADSO_ -- "$(find . -name confdefs.h -print)"
+
 do_make
 
 # No man pages
