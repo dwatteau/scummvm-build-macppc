@@ -1,0 +1,118 @@
+old SDL 1.2 calls very old OSX APIs, triggering warnings
+(TODO: check this, though. did we have a warning? is this code built?)
+
+this issue:
+https://github.com/libsdl-org/SDL-1.2/issues/775
+suggested backporting this PR to SDL 1.2:
+https://github.com/libsdl-org/sdl12-compat/pull/152
+
+so that's what we do, with some small changes in the context of OSX 10.4/10.5. 
+
+XXX: do we need to revert this change, for OSX 10.4/10.5?
+https://github.com/libsdl-org/sdl12-compat/commit/ca53ab4bf85c219a68a30a8bc91a5ca71442962f
+
+--- a/src/main/macosx/SDLMain.h
++++ b/src/main/macosx/SDLMain.h
+@@ -10,7 +10,20 @@
+ 
+ #import <Cocoa/Cocoa.h>
+ 
+-@interface SDLMain : NSObject
++/* Note that the following defines have not been changed in a long time and
++   it's likely going to need fixes if you try it. */
++
++/* Use this flag to determine whether we use SDLMain.nib or not */
++#define		SDL_USE_NIB_FILE	0
++
++@interface SDLMain : NSObject<NSApplicationDelegate>
++- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
++- (void) setupWorkingDirectory:(BOOL)shouldChdir;
++- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename;
++- (void) applicationDidFinishLaunching: (NSNotification *) note;
++#if SDL_USE_NIB_FILE
++- (void)fixMenu:(NSMenu *)aMenu withAppName:(NSString *)appName;
++#endif
+ @end
+ 
+ #endif /* _SDLMain_h_ */
+--- a/src/main/macosx/SDLMain.m
++++ b/src/main/macosx/SDLMain.m
+@@ -17,25 +17,6 @@
+ - (void)setAppleMenu:(NSMenu *)menu;
+ @end
+ 
+-/* Use this flag to determine whether we use SDLMain.nib or not */
+-#define		SDL_USE_NIB_FILE	0
+-
+-/* Use this flag to determine whether we use CPS (docking) or not */
+-#define		SDL_USE_CPS		1
+-#ifdef SDL_USE_CPS
+-/* Portions of CPS.h */
+-typedef struct CPSProcessSerNum
+-{
+-	UInt32		lo;
+-	UInt32		hi;
+-} CPSProcessSerNum;
+-
+-extern OSErr	CPSGetCurrentProcess( CPSProcessSerNum *psn);
+-extern OSErr 	CPSEnableForegroundOperation( CPSProcessSerNum *psn, UInt32 _arg2, UInt32 _arg3, UInt32 _arg4, UInt32 _arg5);
+-extern OSErr	CPSSetFrontProcess( CPSProcessSerNum *psn);
+-
+-#endif /* SDL_USE_CPS */
+-
+ static int    gArgc;
+ static char  **gArgv;
+ static BOOL   gFinderLaunch;
+@@ -64,23 +45,18 @@
+ @end
+ #endif
+ 
+-@interface NSApplication (SDLApplication)
+-@end
++/* The main class of the application, the application's delegate */
++@implementation SDLMain
+ 
+-@implementation NSApplication (SDLApplication)
+-/* Invoked from the Quit menu item */
+-- (void)terminate:(id)sender
++- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender
+ {
+     /* Post a SDL_QUIT event */
+     SDL_Event event;
+     event.type = SDL_QUIT;
+     SDL_PushEvent(&event);
++    return NSTerminateCancel;
+ }
+-@end
+ 
+-/* The main class of the application, the application's delegate */
+-@implementation SDLMain
+-
+ /* Set the working directory to the .app's parent directory */
+ - (void) setupWorkingDirectory:(BOOL)shouldChdir
+ {
+@@ -200,20 +176,13 @@
+     NSAutoreleasePool	*pool = [[NSAutoreleasePool alloc] init];
+     SDLMain				*sdlMain;
+ 
++    /* Ensure the application object is initialised and converted to a GUI app if necessary. */
++    ProcessSerialNumber psn = { 0, kCurrentProcess};
++    TransformProcessType(&psn, kProcessTransformToForegroundApplication);
++
+     /* Ensure the application object is initialised */
+     [NSApplication sharedApplication];
+     
+-#ifdef SDL_USE_CPS
+-    {
+-        CPSProcessSerNum PSN;
+-        /* Tell the dock about us */
+-        if (!CPSGetCurrentProcess(&PSN))
+-            if (!CPSEnableForegroundOperation(&PSN,0x03,0x3C,0x2C,0x1103))
+-                if (!CPSSetFrontProcess(&PSN))
+-                    [NSApplication sharedApplication];
+-    }
+-#endif /* SDL_USE_CPS */
+-
+     /* Set up the menubar */
+     [NSApp setMainMenu:[[NSMenu alloc] init]];
+     setApplicationMenu();
