@@ -1,10 +1,12 @@
 Prevent multiple evaluation of macro argument on ppc.
-
 from OpenBSD ports
+
+also merging this ppc patch from Fedora:
+https://src.fedoraproject.org/rpms/libmad/blob/f26/f/libmad-0.15.1b-ppc.patch
 
 --- a/fixed.h
 +++ b/fixed.h
-@@ -358,15 +358,15 @@ mad_fixed_t mad_f_mul_inline(mad_fixed_t x, mad_fixed_
+@@ -358,15 +358,15 @@
   * significant bit depends on OPT_ACCURACY via mad_f_scale64().
   */
  #  define MAD_F_MLX(hi, lo, x, y)  \
@@ -25,3 +27,14 @@ from OpenBSD ports
  
  #  if defined(OPT_ACCURACY)
  /*
+@@ -379,8 +379,8 @@
+        asm ("addc %0,%2,%3\n\t"  \
+ 	    "adde %1,%4,%5"  \
+ 	    : "=r" (lo), "=r" (hi)  \
+-	    : "%r" (lo), "r" (__lo),  \
+-	      "%r" (hi), "r" (__hi)  \
++	    : "0" (lo), "r" (__lo), \
++	      "1" (hi), "r" (__hi) \
+ 	    : "xer");  \
+     })
+ #  endif
