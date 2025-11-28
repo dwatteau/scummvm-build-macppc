@@ -1,5 +1,7 @@
 #! /bin/sh
 
+# XXX: the 2.10.x to 2.11.x upgrade results in a (several times)
+# larger library...
 FAAD2_VERSION=2_11_2
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -15,6 +17,7 @@ export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
 # Avoid compiling and installing DRM and fixed-point versions
+# FIXME: the following replacement has no effect anymore?
 sed -i'.orig' -e 's/faad\(_drm\(_fixed\)\?\|_fixed\)//g' CMakeLists.txt
 
 do_cmake -DFAAD_BUILD_CLI=no -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS="-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32" -DCMAKE_C_COMPILER=/opt/macports-tff/bin/gcc-mp-7 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.4 -DCMAKE_OSX_SYSROOT=/Developer/SDKs/MacOSX10.4u.sdk
