@@ -8,23 +8,19 @@ https://github.com/libsdl-org/sdl12-compat/pull/152
 
 so that's what we do, with some small changes in the context of OSX 10.4/10.5. 
 
-XXX: do we need to revert this change, for OSX 10.4/10.5?
-https://github.com/libsdl-org/sdl12-compat/commit/ca53ab4bf85c219a68a30a8bc91a5ca71442962f
-
 --- a/src/main/macosx/SDLMain.h
 +++ b/src/main/macosx/SDLMain.h
 @@ -10,7 +10,20 @@
  
  #import <Cocoa/Cocoa.h>
  
--@interface SDLMain : NSObject
 +/* Note that the following defines have not been changed in a long time and
 +   it's likely going to need fixes if you try it. */
 +
 +/* Use this flag to determine whether we use SDLMain.nib or not */
 +#define		SDL_USE_NIB_FILE	0
 +
-+@interface SDLMain : NSObject
+ @interface SDLMain : NSObject
 +- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
 +- (void) setupWorkingDirectory:(BOOL)shouldChdir;
 +- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename;
@@ -63,7 +59,7 @@ https://github.com/libsdl-org/sdl12-compat/commit/ca53ab4bf85c219a68a30a8bc91a5c
  static int    gArgc;
  static char  **gArgv;
  static BOOL   gFinderLaunch;
-@@ -64,23 +45,18 @@
+@@ -64,22 +45,17 @@
  @end
  #endif
  
@@ -84,13 +80,12 @@ https://github.com/libsdl-org/sdl12-compat/commit/ca53ab4bf85c219a68a30a8bc91a5c
 +    return NSTerminateCancel;
  }
 -@end
- 
+-
 -/* The main class of the application, the application's delegate */
 -@implementation SDLMain
--
+ 
  /* Set the working directory to the .app's parent directory */
  - (void) setupWorkingDirectory:(BOOL)shouldChdir
- {
 @@ -200,20 +176,13 @@
      NSAutoreleasePool	*pool = [[NSAutoreleasePool alloc] init];
      SDLMain				*sdlMain;
@@ -116,3 +111,12 @@ https://github.com/libsdl-org/sdl12-compat/commit/ca53ab4bf85c219a68a30a8bc91a5c
      /* Set up the menubar */
      [NSApp setMainMenu:[[NSMenu alloc] init]];
      setApplicationMenu();
+@@ -287,6 +256,8 @@
+ {
+     int status;
+ 
++    [NSApp activateIgnoringOtherApps:YES];
++
+     /* Set the working directory to the .app's parent directory */
+     [self setupWorkingDirectory:gFinderLaunch];
+ 
