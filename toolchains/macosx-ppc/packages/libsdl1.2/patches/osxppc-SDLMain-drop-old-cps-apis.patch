@@ -24,7 +24,7 @@ https://github.com/libsdl-org/sdl12-compat/commit/ca53ab4bf85c219a68a30a8bc91a5c
 +/* Use this flag to determine whether we use SDLMain.nib or not */
 +#define		SDL_USE_NIB_FILE	0
 +
-+@interface SDLMain : NSObject<NSApplicationDelegate>
++@interface SDLMain : NSObject
 +- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
 +- (void) setupWorkingDirectory:(BOOL)shouldChdir;
 +- (BOOL) application:(NSApplication *)theApplication openFile:(NSString *)filename;
