@@ -19,6 +19,7 @@ export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 CC=/opt/macports-tff/bin/gcc-mp-7 \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
+ac_cv_prog_cc_c11=no \
 do_configure \
 --disable-avx \
 --disable-stack-smash-protection --disable-rpath \
