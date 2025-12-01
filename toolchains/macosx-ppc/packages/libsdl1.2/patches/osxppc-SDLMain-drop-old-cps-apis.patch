@@ -1,10 +1,12 @@
-old SDL 1.2 calls very old OSX APIs, triggering warnings
-(TODO: check this, though. did we have a warning? is this code built?)
+SDL 1.2 calls very old, undocumented OSX APIs, triggering warnings
 
 this issue:
 https://github.com/libsdl-org/SDL-1.2/issues/775
 suggested backporting this PR to SDL 1.2:
 https://github.com/libsdl-org/sdl12-compat/pull/152
+
+which uses APIs introduced in OSX 10.3.
+(some context also here: https://github.com/libsdl-org/SDL/issues/1750)
 
 so that's what we do, with some small changes in the context of OSX 10.4/10.5. 
 
