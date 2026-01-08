@@ -2,7 +2,7 @@
 
 # XXX: currently a bit newer than what Debian 13 provides, as for some reason
 # some CVEs haven't been backported yet, there?
-LIBPNG_VERSION=1.6.51
+LIBPNG_VERSION=1.6.52
 #LIBPNG_SHA256=af4fb7f260f839919e5958e5ab01a275d4fe436d45442a36ee62f73e5beb75ba
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
