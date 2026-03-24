@@ -19,3 +19,18 @@ __pycache__/
 # macOS stuff:
 ._*
 .DS_Store
+# Backup files
+*~
+.\#*
+\#*\#
+*.bak
+*.orig
+*.*.swp
+# Archive files
+*.tar
+*.tar.*
+*.tgz
+*.txz
+*.zip
+# Builds
+**/package-build/
