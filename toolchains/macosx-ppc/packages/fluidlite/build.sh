@@ -1,5 +1,7 @@
 #! /bin/sh
 
+# XXX: study going back to Fluidsynth, as it now supports building without Glib
+
 FLUIDLITE_VERSION=4a01cf1c67419e71da971d209f2855bbf4f3bab8
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
