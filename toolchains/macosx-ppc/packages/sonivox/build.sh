@@ -5,6 +5,12 @@
 # is fine.
 #
 # Some investigation will be required, but not in time for this ScummVM release.
+#
+# TODO: also investigate why (in v3) it returns EAS_ERROR_FILE_FORMAT on Leopard
+# while the same soundfont, on the same ScummVM build, appears to load fine
+# on Tiger?  (CoreAudio reads this soundfont fine on both setups.).  Seems to
+# be related to DLSParser() (sometimes?) hitting the "Expected DLS chunk, got XXX"
+# case.
 SONIVOX_VERSION=3.6.16
 #SONIVOX_SHA256=d625ad6b3375a036bf30cd3b0b40e8dde08f0891bfd3a2960650654bdb50318c
 
