@@ -15,6 +15,9 @@ do_http_fetch libmpeg2 "https://download.videolan.org/contrib/libmpeg2/libmpeg2-
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 
+# If building with old base GCC, don't waste time with -Wshadow false positives
+#sed -i'.orig' -e 's/ -Wshadow//g' configure
+
 CC=/opt/macports-tff/bin/gcc-mp-7 \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32 -std=gnu89' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
