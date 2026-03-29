@@ -4,6 +4,9 @@ There is some runtime detection code, and with an older GCC it might be safe
 for G3, but this library is only used in a few cases for a couple of engines,
 so it's probably safer not to trigger this old code at all.
 
+XXX: I'm not sure the way arch_accel() + current build stuff is done really
+safe for non-Altivec devices.
+
 TODO: do test the impacted games/engines on a G4 running Tiger, with and
 without 'sudo nvram boot-args="novmx=1"', and see if it does make a difference,
 when enabling this old Altivec code back
