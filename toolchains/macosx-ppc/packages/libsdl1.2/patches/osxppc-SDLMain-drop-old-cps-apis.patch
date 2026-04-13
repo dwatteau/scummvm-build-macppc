@@ -1,4 +1,7 @@
 SDL 1.2 calls very old, undocumented OSX APIs, triggering warnings
+at run-time, on (at least) Leopard:
+
+    CPSGetCurrentProcess(): This call is deprecated and should not be called anymore.
 
 this issue:
 https://github.com/libsdl-org/SDL-1.2/issues/775

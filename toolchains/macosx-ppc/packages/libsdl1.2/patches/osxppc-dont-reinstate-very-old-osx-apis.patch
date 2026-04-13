@@ -13,11 +13,12 @@ changes on OSX PPC, I prefer reverting to the previous SDL1.2
 behavior, which was effective in many official ScummVM build for
 OSX PPC without any reported issue.
 
-For more context: 
+For more context:
 
 http://forums.libsdl.org/viewtopic.php?p=29802
 https://github.com/libsdl-org/SDL-1.2/commit/7a877568f9250a1f6e2b77551878c06ce2f639bf
 https://github.com/libsdl-org/SDL-1.2/commit/ad8e59d08b892f00e856ca0b793f4dbc7481df65
+https://github.com/libsdl-org/SDL-1.2/commit/1751e870007e51689ced8b8db352d534f7744466
 
 --- a/src/video/quartz/SDL_QuartzGL.m
 +++ b/src/video/quartz/SDL_QuartzGL.m
