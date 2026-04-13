@@ -30,3 +30,4 @@ freetype
 fribidi
 
 libsdl1.2
+sdl-net1.2
