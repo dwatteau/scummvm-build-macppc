@@ -19,7 +19,7 @@ export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 #sed -i'.orig' -e 's/ -Wshadow//g' configure
 
 CC=/opt/macports-tff/bin/gcc-mp-7 \
-CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32 -std=gnu89' \
+CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure --disable-sdl --without-x
 
