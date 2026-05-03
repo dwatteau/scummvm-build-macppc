@@ -1,6 +1,6 @@
 #! /bin/sh
 
-LIBPNG_VERSION=1.6.55
+LIBPNG_VERSION=1.6.58
 #LIBPNG_SHA256=af4fb7f260f839919e5958e5ab01a275d4fe436d45442a36ee62f73e5beb75ba
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
