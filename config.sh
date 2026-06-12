@@ -59,9 +59,6 @@ fi
 
 # Notes:
 #
-# `-Wl,-headerpad_max_install_names` is required for the install_name_tool
-# tricks happening later on.
-#
 # Using updated ar/ld/randlib/strings/strip for their bugfixes and improved
 # support for C++11 content.
 #
@@ -77,7 +74,7 @@ STRINGS=/opt/macports-tff/bin/strings \
 STRIP=/opt/macports-tff/bin/strip \
 CPPFLAGS='-I/staticscummvm/include' \
 CXXFLAGS="$OPTIM_CXXFLAGS $DEBUG_CXXFLAGS -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -m32" \
-LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-headerpad_max_install_names -L/staticscummvm/lib' \
+LDFLAGS='-Wl,-macosx_version_min,10.4 -L/staticscummvm/lib' \
 ./configure \
 --with-staticlib-prefix=/staticscummvm \
 --with-xcodetools-path=/Developer/Tools \
