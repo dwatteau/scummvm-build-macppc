@@ -9,7 +9,7 @@ If you're just interested in _using_ ScummVM on OSX PPC, look for the "Mac OS X 
 - An OSX 10.4 or 10.5 PPC system. (Cross-compiling from i386 10.4/10.5 is untested and unsupported. Same thing applies to Sorbet Leopard.)
     - **IMPORTANT:** If you want to have a build that's going to work on both OSX 10.4 and 10.5, you need to build from a 10.4 box. That's because the libstdc++ C++11 library that's part of the toolkit is only built for the current system. So, even though the dependencies and ScummVM itself will properly target OSX 10.4, you won't be able to run it on OSX 10.4 if you use the C++11 toolkit made for 10.5.
     - If you're just doing a build for yourself on your own OSX 10.5 machine, you don't care, and you *can* build from OSX 10.5. Just don't redistribute it to 10.4 users.
-- Reasonnable knowledge of the Terminal and the Unix shell (you can install [iTerm 0.10](https://downloads.sourceforge.net/iterm/iTerm_0.10.zip) if you're looking for a terminal with tabs on Tiger — some [older versions of iTerm 2](https://github.com/macos-powerpc/powerpc-ports/commit/37f620eef6ed95face132b1ce43fbaca601f620e) may also run but require more work)
+- Reasonable knowledge of the Terminal and the Unix shell (you can install [iTerm 0.10](https://downloads.sourceforge.net/iterm/iTerm_0.10.zip) if you're looking for a terminal with tabs on Tiger — some [older versions of iTerm 2](https://github.com/macos-powerpc/powerpc-ports/commit/37f620eef6ed95face132b1ce43fbaca601f620e) may also run but require more work)
 - Xcode 2.4.1/2.5 for Tiger or 3.0/3.1 for Leopard (available from the [Apple Developer website](https://developer.apple.com/downloads/))
 - Downloading and installing the *Unofficial TenFourFox Development Toolkit*
     - (A quick online search should tell you how to get and install it)
@@ -39,7 +39,7 @@ You need to copy and work from *this* repository.
 
 If you know about Git, use Git. It's part of the Unofficial TenFourFox Development Toolkit above.
 
-**Security warning:** Of course, remember that you're doing requests to the Internet with an OS that's hasn't received any security update for more than a decade!
+**Security warning:** Of course, remember that you're doing requests to the Internet with an OS that hasn't received any security update for more than a decade!
 
 ```sh
 mkdir -p ~/git
@@ -94,7 +94,7 @@ tar xjf /path/to/scummvm-2.9.1.tar.bz2
 
 ### Doing your own ScummVM build
 
-The idea is to go the directory with the ScummVM source code, and call the `config.sh` that's at the root of this OSXPPC build repository:
+The idea is to go to the directory with the ScummVM source code, and call the `config.sh` that's at the root of this OSXPPC build repository:
 
 ```sh
 cd ~/git/scummvm
