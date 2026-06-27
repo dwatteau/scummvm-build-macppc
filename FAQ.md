@@ -28,13 +28,13 @@ The performance improvements between late PPC systems and OSX 10.4/10.5/10.6 Int
 
 Regarding ppc64, I don't see the point; even TenFourFox kept its G5-optimized build 32-bit. Tiger's support for ppc64 is extremely minimal, and I'm not sure we'd see much benefit for the vast majority of supported games. Also, it appears (from some MacRumors forum discussions) that the GCC 7.5 compiler that's used to build ScummVM may have some issues when targeting ppc64. So, once: doesn't look like it's worth the trouble.
 
-For now (2025), a unique, stable and (mostly) reproducible build is preferred.
+For now (2026), a unique, stable and (mostly) reproducible build is preferred.
 
-## When aren't you using MacPorts for the toolchain/dependencies?
+## When aren't you using a newer compiler toolchain?
 
-The work done by MacPorts for preserving OSX 10.4/10.5 PPC compatibility is amazing. But it's a moving target; what works in January may not build anymore in March, because the whole MacPorts tree is always being updated, and regressions happen. Also, bootstraping the full C++11 toolchain (and some other tools such as `cmake`, `git`…) is really, really slow.
+The work done by MacPorts for preserving OSX 10.4/10.5 PPC compatibility is amazing. But it's a moving target; what works in January may not build anymore in March, because the whole MacPorts tree is always being updated, and regressions happen. Also, bootstraping the full C++11 toolchain (and some other tools such as `cmake`, `git`…) is really, really slow. Also, support for OSX 10.4 was recently dropped from upstream MacPorts.
 
-The Unofficial TenFourFox Development Toolkit just works out of the box, and its results are reproducible.
+The old "Unofficial TenFourFox Development Toolkit" just works out of the box, and its results are reproducible.
 
 ## How to run a debugger on ScummVM for OSX PPC?
 
@@ -114,9 +114,9 @@ and then, reboot. Then, try your ScummVM binary, with as many settings as possib
 
 To revert to the default boot settings, type `sudo nvram boot-args=""` instead.
 
-If you want to be sure whether Altivec/VMX is enabled/disabled, run this command: 
+If you want to be sure whether Altivec/VMX is enabled/disabled, run this command:
 ```sh
 sysctl hw.optional.altivec
 ```
 
-where `1` in the output means that it's available, and `0` means it's unavailable. 
+where `1` in the output means that it's available, and `0` means it's unavailable.
