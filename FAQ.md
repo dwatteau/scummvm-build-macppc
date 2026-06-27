@@ -6,7 +6,7 @@ Feel free to open [an issue](https://github.com/dwatteau/scummvm-build-macppc/is
 
 OSX 10.4 (Tiger) and OSX 10.5 (Leopard), on PowerPC systems. (It should also work for users of so-called "Sorbet Leopard", but it's untested.)
 
-It can also be made to run on Intel/i386 Snow Leopard (OSX 10.5) through Rosetta 1. Or you could tweak the build scripts, so that they target i386 instead of ppc32. It's not officially supported, though.
+It can also be made to run on Intel/i386 (until OSX 10.6) through Rosetta 1. Or you could tweak the build scripts, so that they target i386 instead of ppc32. It's not officially supported, though.
 
 The resulting app should be compatible with G3, G4 and G5 processors. Yes, I try to take care of not breaking G3 (or non-Altivec) compatibility (although my own testing on G3 is lightweight).
 
@@ -22,17 +22,17 @@ ScummVM 2.5.x (2021; the last release not requiring a C++11 compiler) *could* be
 
 ## Do you plan on doing an optimized build for G4s/Altivec/G5s or 10.4-10.6 Intel?
 
-Since ScummVM mostly (but not only!) targets "old games", I haven't seen any reason to spend time on this, so far. I don't think there were could be much performance improvement. Building a multi-architecture binary would require even more work, so my time is probably better spent on other areas, for the moment.
+Since ScummVM mostly (but not only!) targets "old games", I haven't seen any reason to spend time on this, so far. I don't think it'd bring a real performance improvement. Building a multi-architecture binary would require even more work, so my time is probably better spent on other areas, for the moment.
 
 The performance improvements between late PPC systems and OSX 10.4/10.5/10.6 Intel means that most of the games appear to work fine, even when using Rosetta 1 to translate the PowerPC code to x86 code. So, I don't see the point in doing an i386 build for i386 Tiger/Leopard/Snow Leopard either.
 
-Regarding ppc64, I don't see the point; even TenFourFox kept its G5-optimized build 32-bit. Tiger's support for ppc64 is extremely minimal, and I'm not sure we'd see much benefit for the vast majority of supported games. Also, it appears (from some MacRumors forum discussions) that the GCC 7.5 compiler that's used to build ScummVM may have some issues when targeting ppc64. So, once: doesn't look like it's worth the trouble.
+Regarding ppc64, I don't see the point; even TenFourFox kept its G5-optimized build 32-bit. Tiger's support for ppc64 is extremely minimal, and I'm not sure we'd see much benefit for the vast majority of supported games. Also, it appears (from some MacRumors forum discussions) that the GCC 7.5 compiler that's used to build ScummVM may have some issues when targeting ppc64. So, it doesn't seem to be worth the trouble.
 
 For now (2026), a unique, stable and (mostly) reproducible build is preferred.
 
-## When aren't you using a newer compiler toolchain?
+## Why aren't you using a newer compiler toolchain?
 
-The work done by MacPorts for preserving OSX 10.4/10.5 PPC compatibility is amazing. But it's a moving target; what works in January may not build anymore in March, because the whole MacPorts tree is always being updated, and regressions happen. Also, bootstraping the full C++11 toolchain (and some other tools such as `cmake`, `git`…) is really, really slow. Also, support for OSX 10.4 was recently dropped from upstream MacPorts.
+The work done by MacPorts for preserving OSX 10.4/10.5 PPC compatibility is amazing. But it's a moving target; what works in January may not build anymore in March, because the whole MacPorts tree is always being updated, and regressions happen. Also, bootstrapping the full C++11 toolchain (and some other tools such as `cmake`, `git`…) is really, really slow. Also, support for OSX 10.4 was recently dropped from upstream MacPorts.
 
 The old "Unofficial TenFourFox Development Toolkit" just works out of the box, and its results are reproducible.
 
@@ -45,7 +45,8 @@ Using your own GDB binary requires special permissions, documented here for exam
 * <https://sourceware.org/gdb/wiki/PermissionsDarwin>
 * <http://gridlab-d.shoutwiki.com/wiki/Mac_OSX/Setup>
 
-It looks like trying to make this work on OSX 10.5 is pointless. So OSX 10.4 may be a hard requirement!
+> [!NOTE]
+> It looks like trying to make this work on OSX 10.5 is pointless. So OSX 10.4 may be a hard requirement!
 
 Ensure there's a `-p` option set up in the file below (Leopard only):
 ```sh
@@ -68,7 +69,7 @@ sudo chgrp procmod /path/to/extracted/gdb/archive/above/gdb7 # parent directory 
 
 and then reboot for the changes to take effect.
 
-Then, after doing an `--disable-optimizations --enable-debug` build (warning: if you don't use `--enable-plugins --default-dynamic`, building too many engines will trigger internal linker errors. So, if you need to particular a particular engine, do your ScummVM debug build with `--disable-detection-full --disable-all-engines --enable-engine=your-engine-name`):
+Then, after doing an `--disable-optimizations --enable-debug` build (warning: if you don't use `--enable-plugins --default-dynamic`, building too many engines will trigger internal linker errors. So, if you need to debug a particular engine, do your ScummVM debug build with `--disable-detection-full --disable-all-engines --enable-engine=your-engine-name`):
 
 ```sh
 /path/to/gdb7 -q ./path/to/scummvm
@@ -82,15 +83,15 @@ Running GDB on the official releases for OSX PPC is not going to be really helpf
 
 ### I have a `GNU Make 3.81 or higher is required` error when trying to build ScummVM
 
-The `/usr/bin/make` that's part of OSX 10.4 is way too old (the one on OSX 10.5 is fine, though).
+The `/usr/bin/make` binary that's part of OSX 10.4 is way too old (the one on OSX 10.5 is fine, though).
 
 Use the `/opt/macports-tff/bin/gmake` binary provided by the toolkit, instead.
 
 ### I have an `ld: library not found for -lcrt1.10.5.o` error at the very end of the build
 
-Maybe you tried running `make` without calling the recommended scripts?
+Maybe you tried running `make` instead of running the included provided build scripts?
 
-Do use or scripts or, at the very least, launch the following command:
+If you really want to call `make` yourself, do this first:
 
 ```sh
 eval "$(grep ^'export ' /path/to/this/scummvm-build-macppc/config.sh)"
