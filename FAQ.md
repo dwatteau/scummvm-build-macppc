@@ -16,7 +16,7 @@ Very unlikely. Building for OSX 10.4 is already quite difficult; going back to 1
 
 The biggest problem is that there's no C++11 toolchain for OSX 10.3, AFAICS.
 
-[ScummVM 1.6.0](https://downloads.scummvm.org/frs/scummvm/1.6.0/scummvm-1.6.0-macosx.dmg) (2013) has been confirmed to work on OSX 10.3. Maybe some releases between ScummVM 1.6.0 and ScummVM 2.5.0 still worked on OSX 10.3; but this has been untested.
+[ScummVM 1.6.0](https://downloads.scummvm.org/frs/scummvm/1.6.0/scummvm-1.6.0-macosx.dmg) (2013) has been confirmed to work on OSX 10.3. Maybe some releases between ScummVM 1.6.0 and ScummVM 2.5.0 still worked on OSX 10.3; but this is untested.
 
 ScummVM 2.5.x (2021; the last release not requiring a C++11 compiler) *could* be made to work on OSX 10.3, though. As of mid-2026, I have [a local branch](https://github.com/dwatteau/scummvm/tree/fix/v25-branch-older-toolchains-fixes) restoring OSX 10.3 compatibility to this older ScummVM release, but it's still a work-in-progress.
 
@@ -26,7 +26,7 @@ Since ScummVM mostly (but not only!) targets "old games", I haven't seen any rea
 
 The performance improvements between late PPC systems and OSX 10.4/10.5/10.6 Intel means that most of the games appear to work fine, even when using Rosetta 1 to translate the PowerPC code to x86 code. So, I don't see the point in doing an i386 build for i386 Tiger/Leopard/Snow Leopard either.
 
-Regarding ppc64, I don't see the point; even TenFourFox kept its G5-optimized build 32-bit. Tiger's support for ppc64 is extremely minimal, and I'm not sure we'd see much benefit for the vast majority of supported games. Also, it appears (from some MacRumors forum discussions) that the GCC 7.5 compiler that's used to build ScummVM may have some issues when targeting ppc64. So, it doesn't seem to be worth the trouble.
+Regarding ppc64, I don't see the point; even TenFourFox kept its G5-optimized build 32-bit. Tiger's support for ppc64 is extremely minimal, and I'm not sure we'd see much benefit for the vast majority of supported games. Also, it appears (from some MacRumors forum discussions) that GCC often has subtle regressions when targeting ppc64. So, it doesn't seem to be worth the trouble.
 
 For now (2026), a unique, stable and (mostly) reproducible build is preferred.
 
@@ -42,7 +42,7 @@ Get a [newer GDB from the old TenFourFox files](https://sourceforge.net/projects
 
 Using your own GDB binary requires special permissions, documented here for example:
 
-* <https://sourceware.org/gdb/wiki/PermissionsDarwin>
+* <https://sourceware.org/gdb/wiki/PermissionsDarwin#Notes_for_older_versions>
 * <http://gridlab-d.shoutwiki.com/wiki/Mac_OSX/Setup>
 
 > [!NOTE]
