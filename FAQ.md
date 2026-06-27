@@ -6,7 +6,7 @@ Feel free to open [an issue](https://github.com/dwatteau/scummvm-build-macppc/is
 
 OSX 10.4 (Tiger) and OSX 10.5 (Leopard), on PowerPC systems. (It should also work for users of so-called "Sorbet Leopard", but it's untested.)
 
-It can also be made to run on Intel/i386 Snow Leopard (OSX 10.5) through Rosetta 1. It's not officially supported, though.
+It can also be made to run on Intel/i386 Snow Leopard (OSX 10.5) through Rosetta 1. Or you could tweak the build scripts, so that they target i386 instead of ppc32. It's not officially supported, though.
 
 The resulting app should be compatible with G3, G4 and G5 processors. Yes, I try to take care of not breaking G3 (or non-Altivec) compatibility (although my own testing on G3 is lightweight).
 
@@ -18,7 +18,7 @@ The biggest problem is that there's no C++11 toolchain for OSX 10.3, AFAICS.
 
 [ScummVM 1.6.0](https://downloads.scummvm.org/frs/scummvm/1.6.0/scummvm-1.6.0-macosx.dmg) (2013) has been confirmed to work on OSX 10.3. Maybe some releases between ScummVM 1.6.0 and ScummVM 2.5.0 still worked on OSX 10.3; but this has been untested.
 
-ScummVM 2.5.x (2021; the last release not requiring a C++11 compiler) *could* be made to work on OSX 10.3 without too much work, in theory. I don't have any OSX 10.3 system to do this, and it's not in my priorities either to work on this. But if someone can lend me access to an OSX 10.3 system, I could maybe try working on doing a "final" build of ScummVM for Panther, *if time permits*.
+ScummVM 2.5.x (2021; the last release not requiring a C++11 compiler) *could* be made to work on OSX 10.3, though. As of mid-2026, I have [a local branch](https://github.com/dwatteau/scummvm/tree/fix/v25-branch-older-toolchains-fixes) restoring OSX 10.3 compatibility to this older ScummVM release, but it's still a work-in-progress.
 
 ## Do you plan on doing an optimized build for G4s/Altivec/G5s or 10.4-10.6 Intel?
 
