@@ -33,8 +33,13 @@ __do_clean_bdir () {
 }
 
 __do_patch () {
-	if [ -d "$PACKAGE_DIR/patches" ]; then
-		for p in "$PACKAGE_DIR/patches"/*.patch; do
+	local suffix
+	if [ -n "$1" ]; then
+		suffix="-$1"
+	fi
+
+	if [ -d "$PACKAGE_DIR/patches$suffix" ]; then
+		for p in "$PACKAGE_DIR/patches$suffix"/*.patch; do
 			echo "Applying $p"
 			patch -N -t -p1 < "$p"
 		done
