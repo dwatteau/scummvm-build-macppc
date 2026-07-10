@@ -166,6 +166,8 @@ if [ -z "$NO_FUNCTIONS_PLATFORM" -a -f "$HELPERS_DIR"/functions-platform.sh ]; t
 	. "$HELPERS_DIR"/functions-platform.sh
 fi
 
+[ -n "$PREFIX" ] || error "PREFIX not set"
+
 # Enable exit on error
 set -e
 
