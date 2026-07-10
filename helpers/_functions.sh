@@ -61,14 +61,7 @@ __do_verify () {
 }
 
 __do_pkg_fetch () {
-	if [ -d "$1"*/ ]; then
-		rm -rf "$1"*/
-	fi
-	apt-get update
-	DEBIAN_FRONTEND=noninteractive apt-get source -y "$1"
-	rm -rf /var/lib/apt/lists/*
-	cd "$1"*/
-	do_patch
+	error "pkg_fetch is not implemented for this target (no APT)"
 }
 
 __do_http_fetch () {
