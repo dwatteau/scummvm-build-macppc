@@ -51,7 +51,7 @@ cd ~/git
 
 Check that you meet the requirements (*TODO:* very lightweight tests at the moment):
 ```sh
-cd scummvm-build-macppc/toolchains/macosx-ppc
+cd scummvm-build-macppc
 ./prepare.sh
 ```
 
