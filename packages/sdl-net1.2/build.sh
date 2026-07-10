@@ -10,11 +10,8 @@ do_make_bdir
 
 do_http_fetch SDL_net "https://github.com/libsdl-org/SDL_net/archive/${SDL_NET_VERSION}.tar.gz" 'tar xzf'
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
 # Without --enable-shared, it fails to build its useless programs
-CC=/opt/macports-tff/bin/gcc-mp-7 \
+CC="$CC" \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure --with-sdl-prefix=$PREFIX --disable-sdltest --enable-shared --disable-gui

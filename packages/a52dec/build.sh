@@ -13,15 +13,12 @@ do_make_bdir
 do_http_fetch a52dec "https://comstyle.com/source/a52dec-snapshot.tar.gz" \
 	'tar xzf' #"sha256:${LIBMAD_SHA256}"
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
 sed -i'.orig' \
 -e 's|-O3|-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32|g' \
 -e 's|-g -O2|-O2|g' \
 configure
 
-CC=/opt/macports-tff/bin/gcc-mp-7 \
+CC="$CC" \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure --disable-debug
 

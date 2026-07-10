@@ -10,9 +10,6 @@ do_make_bdir
 
 do_http_fetch SDL "https://github.com/libsdl-org/SDL-1.2/archive/${SDL_VERSION}.tar.gz" 'tar xzf'
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
 # If building with a newer GCC, remove this ancient Apple-only flag
 #sed -i'.orig' -e 's/-fpascal-strings//g' configure
 
@@ -25,6 +22,8 @@ export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
 # So, force a compilation with the old Apple compiler (which doesn't have
 # this issue) as long as we can, since the Altivec speedup is probably
 # higher than the compiler update gains for this type of code(?)
+#
+# XXX: here, introduce "CC_BASE_OLD"?
 CC=gcc-4.0 \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
@@ -34,6 +33,6 @@ do_configure \
 do_make
 
 # No man pages
-do_make install-bin install-hdrs install-lib install-data 
+do_make install-bin install-hdrs install-lib install-data
 
 do_clean_bdir

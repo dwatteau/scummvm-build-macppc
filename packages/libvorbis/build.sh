@@ -12,12 +12,9 @@ do_make_bdir
 do_http_fetch libvorbis "http://ftp.oregonstate.edu/.1/xiph/releases/vorbis/libvorbis-${LIBVORBIS_VERSION}.tar.gz" \
 	'tar xzf' #"sha256:${LIBVORBIS_SHA256}"
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
 sed -i'.orig' -e 's/-g -O3//g' configure
 
-CC=/opt/macports-tff/bin/gcc-mp-7 \
+CC="$CC" \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure \

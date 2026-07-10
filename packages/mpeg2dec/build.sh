@@ -12,13 +12,10 @@ do_make_bdir
 do_http_fetch libmpeg2 "https://download.videolan.org/contrib/libmpeg2/libmpeg2-${LIBMPEG2_VERSION}.tar.gz" \
 	'tar xzf' #"sha256:${LIBMPEG2_SHA256}"
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
 # If building with old base GCC, don't waste time with -Wshadow false positives
 #sed -i'.orig' -e 's/ -Wshadow//g' configure
 
-CC=/opt/macports-tff/bin/gcc-mp-7 \
+CC="$CC" \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
 do_configure --disable-sdl --without-x

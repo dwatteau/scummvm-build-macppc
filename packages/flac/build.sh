@@ -11,15 +11,12 @@ do_make_bdir
 do_http_fetch flac "http://downloads.xiph.org/releases/flac/flac-${FLAC_VERSION}.tar.xz" \
         'tar --use-compress-program=/opt/local/bin/xz -xf' #"sha256:${FLAC_SHA256}"
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
-# stack protection will cause undefined symbols errors, when ScummVM
-# links against this library, when targeting OSX 10.4
-CC=/opt/macports-tff/bin/gcc-mp-7 \
+# note: for this port, use --disable-stack-smash-protection, as otherwise
+# "undefined symbol" errors will happen at link time, when linking against
+# this library and targeting OSX 10.4
+CC="$CC" \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
-ac_cv_prog_cc_c11=no \
 do_configure \
 --disable-avx \
 --disable-stack-smash-protection --disable-rpath \

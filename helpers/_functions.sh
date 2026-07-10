@@ -1,4 +1,21 @@
+#! /bin/sh
+
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+# TODO: allow 10.5 target?
+export MACOSX_DEPLOYMENT_TARGET=10.4
+export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
+
+# For Autoconf projects, avoid going into C11 mode. Most of the time,
+# compilers still build fine in C99/GNU99 mode, and base libc in older
+# macOS releases has no C11 support anyway -- let's avoid embedding a
+# newer libc or something.
+export ac_cv_prog_cc_c11=no
+
+# TODO: gcc-mp-7, 4.8...
+CC=/opt/macports-tff/bin/gcc-mp-7
+
+# TODO: handle old base tar(1) and 'tar --use-compress-program' hacks
 
 __do_make_bdir () {
 	# If build dir hasn't been cleant with do_clean_dir before this step will fail
@@ -33,6 +50,7 @@ __do_verify () {
 		return
 	fi
 
+	# TODO: restore this feature for old macOS tooling.
 	case $2 in
 		'gpgurl:'*)
 			wget --no-hsts --progress=dot "${2#gpgurl:}" -O "$1.sig"
@@ -83,14 +101,16 @@ __do_git_fetch () {
 	if [ -d "$1"*/ ]; then
 		rm -rf "$1"*/
 	fi
-	git clone "$2" "$1"
+	/opt/macports-tff/bin/git clone "$2" "$1"
 	cd "$1"*/
-	git checkout "$3"
-	git submodule update --init
+	/opt/macports-tff/bin/git checkout "$3"
+	/opt/macports-tff/bin/git submodule update --init
 	do_patch
 }
 
 __do_configure () {
+	# XXX: what about --host= for OSXPPC?
+	ac_cv_prog_cc_c11="$ac_cv_prog_cc_c11" \
 	./configure --prefix=$PREFIX --host=$HOST --disable-shared "$@"
 }
 
@@ -98,6 +118,8 @@ __do_cmake () {
 	mkdir -p build
 	cd build
 	/opt/macports-tff/bin/cmake -DCMAKE_INSTALL_PREFIX=$PREFIX \
+		-DCMAKE_OSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET \
+		-DCMAKE_OSX_SYSROOT=$SDKROOT \
 		-DBUILD_SHARED_LIBS=no "$@" ..
 }
 

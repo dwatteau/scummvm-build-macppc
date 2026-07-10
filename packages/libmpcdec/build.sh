@@ -12,16 +12,12 @@ do_make_bdir
 do_http_fetch musepack "http://deb.debian.org/debian/pool/main/libm/libmpc/libmpc_${LIBMPCDEC_VERSION}.orig.tar.gz" \
         'tar xzf' #"sha256:${LIBMPCDEC_SHA256}"
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
 /opt/macports-tff/bin/autoreconf -fi
 
 # Debian adds/uses --enable-mpcchap, but that seems useless for our use?
-CC=/opt/macports-tff/bin/gcc-mp-7 \
+CC="$CC" \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS='-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk' \
-ac_cv_prog_cc_c11=no \
 do_configure
 
 do_make -C include

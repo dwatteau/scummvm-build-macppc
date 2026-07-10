@@ -18,12 +18,9 @@ do_http_fetch bzip2 "https://sourceware.org/pub/bzip2/bzip2-${BZIP2_VERSION}.tar
 
 # Manually build and install only the static library and header
 
-export MACOSX_DEPLOYMENT_TARGET=10.4
-export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk
-
 # bzip2 Makefile redefines these variables so override them here
 sed -i'.orig' -e 's|-O2 -g|-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32|g' Makefile
-do_make libbz2.a CC=/opt/macports-tff/bin/gcc-mp-7 #AR=$AR RANLIB=$RANLIB
+do_make libbz2.a CC="$CC" #AR=$AR RANLIB=$RANLIB
 
 mkdir -p "$PREFIX/lib"
 cp -f libbz2.a "$PREFIX/lib"
