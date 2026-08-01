@@ -2,6 +2,8 @@
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
+export XZ_PATH=/opt/macports-tff/bin
+
 # TODO: allow 10.5 target?
 export MACOSX_DEPLOYMENT_TARGET=10.4
 export SDKROOT=/Developer/SDKs/MacOSX10.4u.sdk

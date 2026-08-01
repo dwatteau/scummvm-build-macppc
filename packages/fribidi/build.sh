@@ -10,7 +10,7 @@ HELPERS_DIR=$PACKAGE_DIR/../../helpers
 do_make_bdir
 
 do_http_fetch fribidi "https://github.com/fribidi/fribidi/releases/download/v${FRIBIDI_VERSION}/fribidi-${FRIBIDI_VERSION}.tar.xz" \
-        'tar --use-compress-program=/opt/local/bin/xz -xf' #"sha256:${FRIBIDI_SHA256}"
+        "tar --use-compress-program=$XZ_PATH/xz -xf" #"sha256:${FRIBIDI_SHA256}"
 
 CC="$CC" \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \

@@ -9,7 +9,7 @@ HELPERS_DIR=$PACKAGE_DIR/../../helpers
 do_make_bdir
 
 do_http_fetch flac "http://downloads.xiph.org/releases/flac/flac-${FLAC_VERSION}.tar.xz" \
-        'tar --use-compress-program=/opt/local/bin/xz -xf' #"sha256:${FLAC_SHA256}"
+        "tar --use-compress-program=$XZ_PATH/xz -xf" #"sha256:${FLAC_SHA256}"
 
 # note: for this port, use --disable-stack-smash-protection, as otherwise
 # "undefined symbol" errors will happen at link time, when linking against
