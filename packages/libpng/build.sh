@@ -1,6 +1,6 @@
 #! /bin/sh
 
-LIBPNG_VERSION=1.6.58
+LIBPNG_VERSION=1.6.59
 #LIBPNG_SHA256=af4fb7f260f839919e5958e5ab01a275d4fe436d45442a36ee62f73e5beb75ba
 
 PACKAGE_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -12,7 +12,6 @@ do_make_bdir
 do_http_fetch libpng "https://download.sourceforge.net/project/libpng/libpng16/${LIBPNG_VERSION}/libpng-${LIBPNG_VERSION}.tar.gz" \
 	'tar xzf' #"sha256:${LIBPNG_SHA256}"
 
-CC="$CC" \
 CFLAGS='-O2 -mmacosx-version-min=10.4 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -Wa,-force_cpusubtype_ALL -m32' \
 LDFLAGS="-Wl,-macosx_version_min,10.4 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk -Wl,-search_paths_first -L$PREFIX/lib" \
 CPPFLAGS="-I$PREFIX/include" \
